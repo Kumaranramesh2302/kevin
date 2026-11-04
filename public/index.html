@@ -2781,15 +2781,15 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
 
 
-    /* Luxury Playing Card Collector Inner Front Styling */
+    /* Luxury Playing Card Collector Inner Front Styling - BOLD REFINED EDITION */
     .card-face.card-front {
       transform: rotateY(180deg);
       background: #FAF8F5;
-      border: 1.5px solid #1E1D1B;
+      border: 1.8px solid #000000;
       border-radius: 16px;
       box-shadow: 
-        0 16px 40px rgba(0, 0, 0, 0.65),
-        0 2px 8px rgba(0, 0, 0, 0.4);
+        0 18px 45px rgba(0, 0, 0, 0.7),
+        0 3px 10px rgba(0, 0, 0, 0.45);
       padding: 0;
       display: flex;
       flex-direction: column;
@@ -2800,16 +2800,16 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
     .card-border-mid {
       position: absolute;
-      inset: 9px;
-      border: 1.2px solid #1E1D1B;
+      inset: 8px;
+      border: 1.5px solid #000000;
       border-radius: 12px;
       pointer-events: none;
     }
 
     .card-border-inner {
       position: absolute;
-      inset: 13px;
-      border: 0.6px solid rgba(30, 29, 27, 0.25);
+      inset: 12px;
+      border: 0.8px solid rgba(0, 0, 0, 0.35);
       border-radius: 9px;
       pointer-events: none;
     }
@@ -2825,6 +2825,13 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     .card-corner-svg.tr { top: 8px; right: 8px; transform: scaleX(-1); }
     .card-corner-svg.bl { bottom: 8px; left: 8px; transform: scaleY(-1); }
     .card-corner-svg.br { bottom: 8px; right: 8px; transform: scale(-1, -1); }
+    .card-corner-svg path {
+      stroke: #000000;
+      stroke-width: 1.5;
+    }
+    .card-corner-svg circle {
+      fill: #000000;
+    }
 
     .card-corner-index {
       position: absolute;
@@ -2833,21 +2840,23 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       align-items: center;
       z-index: 5;
       font-family: 'Cinzel', serif;
-      color: #1E1D1B;
+      color: #000000;
       line-height: 1;
     }
     .card-corner-index.tl { top: 18px; left: 18px; }
     .card-corner-index.br { bottom: 18px; right: 18px; transform: rotate(180deg); }
     .corner-rank {
-      font-size: 24px;
-      font-weight: 800;
+      font-size: 26px;
+      font-weight: 900;
       letter-spacing: -0.02em;
-      color: #1E1D1B;
+      color: #000000;
       text-shadow: none;
+      -webkit-text-stroke: 0.4px #000000;
     }
     .corner-suit {
-      font-size: 15px;
-      color: #1E1D1B;
+      font-size: 16px;
+      color: #000000;
+      font-weight: 900;
       margin-top: 2px;
     }
 
@@ -2867,10 +2876,10 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     }
     .narrative-text {
       font-family: 'Montserrat', sans-serif;
-      font-size: clamp(12.5px, 1.05vw, 13.5px);
-      font-weight: 500;
-      line-height: 1.58;
-      color: #222221;
+      font-size: clamp(12.5px, 1.1vw, 13.8px);
+      font-weight: 700;
+      line-height: 1.56;
+      color: #000000;
       text-align: center;
       letter-spacing: 0.01em;
       opacity: 1;
@@ -2908,20 +2917,21 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     .crown-flank-line {
       flex: 1;
       max-width: 75px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(30, 29, 27, 0.4));
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.6));
       position: relative;
     }
     .crown-flank-line.right {
-      background: linear-gradient(90deg, rgba(30, 29, 27, 0.4), transparent);
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.6), transparent);
     }
     .crown-flank-line::after {
       content: '◆';
       position: absolute;
       right: -4px;
-      top: -5px;
-      font-size: 6px;
-      color: #1E1D1B;
+      top: -5.5px;
+      font-size: 7px;
+      color: #000000;
+      font-weight: 900;
     }
     .crown-flank-line.right::after {
       left: -4px;
@@ -2929,42 +2939,51 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     }
 
     .gold-crown-svg {
-      width: 26px;
-      height: 17px;
+      width: 28px;
+      height: 18px;
       filter: none;
+    }
+    .gold-crown-svg path {
+      stroke: #000000;
+      stroke-width: 1.5;
+      fill: none;
+    }
+    .gold-crown-svg circle {
+      fill: #000000;
     }
 
     .card-chapter-tag {
       font-family: 'Montserrat', sans-serif;
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      color: #555555;
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      color: #000000;
       margin-bottom: 4px;
       text-transform: uppercase;
     }
 
     .card-main-title {
       font-family: 'Cinzel', serif;
-      font-size: clamp(20px, 1.9vw, 25px);
-      font-weight: 700;
-      letter-spacing: 0.08em;
+      font-size: clamp(22px, 2.1vw, 27px);
+      font-weight: 900;
+      letter-spacing: 0.09em;
       text-transform: uppercase;
-      color: #141414;
+      color: #000000;
       background: none;
       -webkit-background-clip: initial;
-      -webkit-text-fill-color: #141414;
+      -webkit-text-fill-color: #000000;
       margin-bottom: 4px;
       text-shadow: none;
-      line-height: 1.18;
+      line-height: 1.15;
+      -webkit-text-stroke: 0.35px #000000;
     }
 
     .card-tagline {
       font-family: 'Montserrat', sans-serif;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      color: #555555;
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      color: #1a1a1a;
       text-transform: uppercase;
     }
 
@@ -2978,12 +2997,13 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     }
     .divider-line {
       flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(30, 29, 27, 0.35), transparent);
+      height: 1.2px;
+      background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.5), transparent);
     }
     .divider-star {
-      color: #1E1D1B;
-      font-size: 8px;
+      color: #000000;
+      font-size: 9px;
+      font-weight: 900;
     }
 
     .card-footer-box {
@@ -2996,15 +3016,15 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     }
     .footer-line {
       width: 76%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(30, 29, 27, 0.25), transparent);
+      height: 1.2px;
+      background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.35), transparent);
     }
     .card-edition-text {
       font-family: 'Montserrat', sans-serif;
-      font-size: 8.5px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      color: #666666;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      color: #000000;
       text-transform: uppercase;
     }
 
@@ -4253,7 +4273,502 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       z-index: 60 !important;
     }
 
-  </style>
+  
+    /* ============================================================
+       GLOBAL LAMP-BASED THEME SYSTEM (Dark Default <-> Premium Light)
+       ============================================================ */
+    body, html {
+      transition: background-color 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+                  color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Tactile Lamp Click Bounce Animation */
+    @keyframes lampCordPull {
+      0% { transform: translateX(-50%) translateY(0); }
+      30% { transform: translateX(-50%) translateY(8px); }
+      60% { transform: translateX(-50%) translateY(-2px); }
+      100% { transform: translateX(-50%) translateY(0); }
+    }
+    .lamp-fixture-container.lamp-toggling {
+      animation: lampCordPull 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    /* Lamp Visual States: Off (Dark default) vs On (Light mode) */
+    .lamp-emitter-core {
+      fill: #475569;
+      filter: none;
+      opacity: 0.32;
+      transition: fill 0.5s ease, filter 0.5s ease, opacity 0.5s ease;
+    }
+    .lamp-conical-rays {
+      opacity: 0;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .lamp-floor-reflection {
+      opacity: 0;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* When Light Mode is Active (Lamp is ON) */
+    body.light-theme .lamp-emitter-core,
+    .studio-stage-sticky.white-mode .lamp-emitter-core {
+      fill: #ffffff !important;
+      filter: url(#lamp-core-glow-filter) !important;
+      opacity: 1 !important;
+    }
+    body.light-theme .lamp-conical-rays,
+    .studio-stage-sticky.white-mode .lamp-conical-rays {
+      opacity: 0.35 !important;
+      mix-blend-mode: multiply !important;
+    }
+    body.light-theme .lamp-floor-reflection,
+    .studio-stage-sticky.white-mode .lamp-floor-reflection {
+      opacity: 0.22 !important;
+      background: radial-gradient(ellipse at 50% 90%, rgba(2, 132, 199, 0.12) 0%, transparent 70%) !important;
+    }
+
+    /* ------------------------------------------------------------
+       GLOBAL LIGHT THEME ADAPTATIONS ACROSS ALL 5 SLIDES
+       ------------------------------------------------------------ */
+    body.light-theme {
+      background-color: #F8F9FA !important;
+      color: #0f172a !important;
+    }
+
+    /* Global Nav & Top Bar */
+    body.light-theme nav a {
+      color: #1e293b !important;
+      text-shadow: none !important;
+      background: rgba(255, 255, 255, 0.8) !important;
+      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    }
+    body.light-theme nav a:hover {
+      color: #0284c7 !important;
+      background: #ffffff !important;
+    }
+    body.light-theme .top span {
+      color: #334155 !important;
+      text-shadow: none !important;
+    }
+    body.light-theme .soc a {
+      color: #0f172a !important;
+      background: rgba(255, 255, 255, 0.85) !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+    }
+    body.light-theme .soc a:hover {
+      border-color: #0f172a !important;
+      background: #ffffff !important;
+    }
+
+    /* Slide 1 (Hero) */
+    body.light-theme .hero {
+      background-color: #F8F9FA !important;
+    }
+    body.light-theme .frame {
+      border-color: rgba(0, 0, 0, 0.1) !important;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.08) !important;
+    }
+    body.light-theme .role .role-line-1 {
+      color: #0f172a !important;
+      text-shadow: 0 1px 12px rgba(255, 255, 255, 0.95), 0 0 20px rgba(255, 255, 255, 0.9) !important;
+    }
+    body.light-theme .role .role-line-2 {
+      color: #475569 !important;
+      text-shadow: 0 1px 8px rgba(255, 255, 255, 0.95) !important;
+    }
+
+    /* Slide 2 (Camera & Photos) */
+    body.light-theme .camera-gallery-section {
+      background-color: #F1F3F5 !important;
+    }
+    body.light-theme .gallery-photo-card {
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.08) !important;
+    }
+    body.light-theme .photo-modal-container {
+      background: rgba(255, 255, 255, 0.98) !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.22) !important;
+    }
+    body.light-theme .photo-modal-title {
+      color: #0f172a !important;
+    }
+    body.light-theme .photo-modal-desc {
+      color: #64748b !important;
+    }
+    body.light-theme .photo-modal-close {
+      color: #0f172a !important;
+      background: rgba(0, 0, 0, 0.06) !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    }
+    body.light-theme .photo-modal-footer {
+      background: rgba(248, 250, 252, 0.88) !important;
+      border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+    }
+    body.light-theme .photo-modal-nav-btn {
+      background: rgba(0, 0, 0, 0.05) !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+      color: #1e293b !important;
+    }
+    body.light-theme .photo-modal-counter {
+      color: #64748b !important;
+    }
+
+    /* Slide 3 (Film Strip Reel) */
+    body.light-theme .film-strip-section {
+      background-color: #F4F5F7 !important;
+    }
+    body.light-theme .film-info-panel {
+      background: rgba(255, 255, 255, 0.92) !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1) !important;
+    }
+    body.light-theme .film-info-title {
+      color: #0f172a !important;
+    }
+    body.light-theme .film-info-desc {
+      color: #475569 !important;
+    }
+    body.light-theme .film-info-index {
+      color: #0284c7 !important;
+    }
+    body.light-theme .film-modal-container {
+      background: rgba(255, 255, 255, 0.98) !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.22) !important;
+    }
+    body.light-theme .film-modal-title {
+      color: #0f172a !important;
+    }
+    body.light-theme .film-modal-desc {
+      color: #64748b !important;
+    }
+    body.light-theme .film-modal-close {
+      color: #0f172a !important;
+      background: rgba(0, 0, 0, 0.06) !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    }
+    body.light-theme .film-modal-footer {
+      background: rgba(248, 250, 252, 0.88) !important;
+      border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+    }
+    body.light-theme .film-modal-nav-btn {
+      background: rgba(0, 0, 0, 0.05) !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+      color: #1e293b !important;
+    }
+    body.light-theme .film-modal-counter {
+      color: #64748b !important;
+    }
+
+    /* Slide 4 (Playing Cards) */
+    body.light-theme .story-deck-section {
+      background: #E8ECEF !important;
+    }
+    body.light-theme .deck-hud-title {
+      color: #0f172a !important;
+      -webkit-text-fill-color: #0f172a !important;
+      text-shadow: none !important;
+    }
+    body.light-theme .hud-sparkle {
+      color: #64748b !important;
+    }
+    body.light-theme .deck-luxury-bg-svg rect,
+    body.light-theme .deck-luxury-bg-svg path {
+      stroke: rgba(0, 0, 0, 0.06) !important;
+    }
+    body.light-theme .card-face.card-front,
+    body.light-theme .card-face.card-back {
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2), 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    }
+    body.light-theme .deck-stack-block {
+      box-shadow:
+        0 1px 0 #D5D2C8, 0 2px 0 #C2BEB2,
+        0 3px 0 #D5D2C8, 0 4px 0 #C2BEB2,
+        0 5px 0 #D5D2C8, 0 6px 0 #C2BEB2,
+        0 7px 0 #D5D2C8, 0 8px 0 #C2BEB2,
+        0 14px 28px rgba(0,0,0,0.2) !important;
+    }
+    body.light-theme .deck-nav-pills {
+      background: rgba(255, 255, 255, 0.92) !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    }
+    body.light-theme .deck-nav-pill-btn {
+      color: #64748b !important;
+    }
+    body.light-theme .deck-nav-pill-btn.active {
+      color: #ffffff !important;
+      background: #0f172a !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+    }
+    body.light-theme .deck-scroll-cue {
+      color: #64748b !important;
+    }
+    body.light-theme .deck-label-pill {
+      background: rgba(255, 255, 255, 0.92) !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08) !important;
+    }
+    body.light-theme .deck-label-title {
+      color: #64748b !important;
+    }
+    body.light-theme .deck-label-count {
+      color: #0f172a !important;
+      background: rgba(0, 0, 0, 0.06) !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    }
+
+    /* Footer */
+    body.light-theme footer {
+      background-color: #F8F9FA !important;
+      color: #64748b !important;
+      border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+    }
+
+    /* ============================================================
+       3. COMPREHENSIVE RESPONSIVE MOBILE OPTIMIZATIONS
+       ============================================================ */
+    @media (max-width: 768px) {
+      /* Global Mobile Safety */
+      html, body {
+        overflow-x: hidden !important;
+        max-width: 100vw;
+        width: 100%;
+      }
+
+      /* Slide 1 (Hero) */
+      .hero {
+        overflow: hidden !important;
+      }
+      nav {
+        top: 14px !important;
+        right: 14px !important;
+        gap: 12px !important;
+      }
+      nav a {
+        font-size: 11px !important;
+        padding: 5px 9px !important;
+      }
+      .top {
+        top: 14px !important;
+        left: 14px !important;
+      }
+      .top span {
+        font-size: 11px !important;
+        max-width: 44vw !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+      .soc {
+        bottom: 16px !important;
+        left: 14px !important;
+      }
+      .role {
+        right: 14px !important;
+        bottom: 14px !important;
+        gap: 2px !important;
+      }
+      .role .role-line-1 {
+        font-size: clamp(11px, 3.2vw, 13.5px) !important;
+        letter-spacing: 0.1em !important;
+      }
+      .role .role-line-2 {
+        font-size: clamp(9px, 2.4vw, 11px) !important;
+        letter-spacing: 0.18em !important;
+      }
+
+      /* Slide 2 (Camera Gallery) */
+      .camera-gallery-section {
+        overflow: hidden !important;
+      }
+      :root {
+        --photo-w: clamp(75px, 20vw, 98px) !important;
+        --photo-h: clamp(94px, 25vw, 124px) !important;
+      }
+
+      /* Slide 3 (Film Strip Reel) */
+      .film-strip-section {
+        overflow: hidden !important;
+      }
+      .film-hud {
+        padding: 16px 16px !important;
+      }
+      .film-info-index {
+        font-size: 10px !important;
+        letter-spacing: 0.16em !important;
+      }
+      .film-info-title {
+        font-size: clamp(16px, 4.5vw, 22px) !important;
+      }
+      .film-info-desc {
+        font-size: clamp(8.5px, 2.5vw, 10.5px) !important;
+      }
+      .film-modal-container {
+        width: 95vw !important;
+        max-height: 88vh !important;
+        border-radius: 14px !important;
+      }
+      .film-modal-header {
+        padding: 14px 16px !important;
+      }
+      .film-modal-title {
+        font-size: 16px !important;
+      }
+      .film-modal-player-wrap, .film-modal-video {
+        max-height: 52vh !important;
+      }
+      .film-modal-footer {
+        padding: 12px 16px !important;
+      }
+      .film-modal-nav-btn {
+        padding: 6px 12px !important;
+        font-size: 9.5px !important;
+        letter-spacing: 0.12em !important;
+      }
+      .film-modal-counter {
+        font-size: 9.5px !important;
+      }
+
+      /* Slide 4 (Playing Cards) */
+      .story-deck-section {
+        overflow: hidden !important;
+        --card-w: clamp(265px, 78vw, 305px) !important;
+        --card-h: clamp(420px, 60vh, 480px) !important;
+        --card-gap: 16px !important;
+      }
+      .deck-arena {
+        transform: translateY(8px) !important;
+      }
+      .deck-hud-header {
+        top: 10px !important;
+      }
+      .deck-hud-title {
+        font-size: clamp(22px, 5.8vw, 30px) !important;
+        letter-spacing: 0.1em !important;
+      }
+      .card-body-content {
+        padding: 12px 14px 10px !important;
+      }
+      .crown-ornament-row {
+        margin-bottom: 2px !important;
+      }
+      .card-main-title {
+        font-size: clamp(17px, 4.4vw, 20px) !important;
+      }
+      .card-center-divider {
+        margin: 4px auto !important;
+      }
+      .card-narrative-box {
+        padding: 0 6px !important;
+        max-width: 260px !important;
+        gap: 6px !important;
+      }
+      .narrative-text {
+        font-size: clamp(11px, 2.9vw, 12px) !important;
+        line-height: 1.48 !important;
+      }
+      .card-footer-box {
+        margin-top: auto !important;
+        padding-bottom: 2px !important;
+      }
+      .deck-nav-dock {
+        bottom: 12px !important;
+        width: 95vw !important;
+      }
+      .deck-nav-pills {
+        padding: 4px 8px !important;
+        gap: 4px !important;
+        max-width: 95vw !important;
+        overflow-x: auto !important;
+      }
+      .deck-nav-pill-btn {
+        font-size: 9.5px !important;
+        padding: 5px 9px !important;
+        letter-spacing: 1px !important;
+        white-space: nowrap !important;
+      }
+      .deck-scroll-cue {
+        font-size: 8px !important;
+        letter-spacing: 1.2px !important;
+      }
+      .deck-label-pill {
+        bottom: -36px !important;
+        padding: 3px 10px !important;
+        font-size: 8.5px !important;
+      }
+
+      /* Slide 5 (Creative Studio Workspace & Lamp) */
+      .physical-lamp-svg {
+        width: clamp(160px, 42vw, 200px) !important;
+        height: auto !important;
+      }
+      .lamp-click-hint {
+        top: 110px !important;
+        font-size: 9px !important;
+        padding: 4px 12px !important;
+      }
+      .showcase-viewport {
+        transform: translateY(18px) !important;
+      }
+      .hero-card-panel {
+        width: min(325px, 88vw) !important;
+        padding: 18px 16px !important;
+      }
+      .hero-tag {
+        font-size: 9px !important;
+        letter-spacing: 0.16em !important;
+      }
+      .hero-title {
+        font-size: clamp(18px, 5.2vw, 24px) !important;
+      }
+      .hero-subtitle {
+        font-size: 11px !important;
+        line-height: 1.45 !important;
+      }
+      .preview-pill {
+        font-size: 9px !important;
+        padding: 4px 8px !important;
+      }
+      .three-sections-deck {
+        width: min(325px, 88vw) !important;
+        max-height: 58vh !important;
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        padding-bottom: 24px !important;
+      }
+      .main-section-card {
+        padding: 14px 14px !important;
+      }
+      .section-title {
+        font-size: 14px !important;
+      }
+      .spec-item {
+        padding: 6px 8px !important;
+      }
+      .spec-lbl, .spec-val {
+        font-size: 10px !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .top span {
+        max-width: 38vw !important;
+      }
+      .story-deck-section {
+        --card-w: min(290px, 88vw) !important;
+        --card-h: clamp(450px, 64vh, 520px) !important;
+      }
+      .hero-card-panel {
+        width: min(300px, 92vw) !important;
+      }
+      .three-sections-deck {
+        width: min(300px, 92vw) !important;
+      }
+    }
+
+</style>
 
 
 
@@ -5213,7 +5728,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
           <ellipse cx="110" cy="137" rx="36" ry="5.5" fill="#ffffff" filter="url(#lamp-core-glow-filter)" />
         </svg>
 
-        <div class="lamp-click-hint">Click Lamp for White Studio</div>
+        <div class="lamp-click-hint">Click Lamp for Light Theme</div>
       </div>
 
       <!-- ============================================================
@@ -5917,7 +6432,7 @@ var vx,vy;
 
 
 
-function draw(){ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);ctx.fillStyle=fg;
+function draw(){ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);ctx.fillStyle=document.body.classList.contains('light-theme')?'#111827':fg;
 
 
 
@@ -7010,6 +7525,23 @@ fonts.catch(function(){}).then(function(){return document.fonts?document.fonts.r
   floorMesh.renderOrder = 2;
   scene.add(floorMesh);
 
+  window.addEventListener('themetoggle', (e) => {
+    const isLight = e.detail && e.detail.isLight;
+    if (isLight) {
+      scene.background.set(0xF4F5F7);
+      scene.fog.color.set(0xF4F5F7);
+      floorMat.color.set(0xDFE2E6);
+      ambientLight.color.set(0xFFFFFF);
+      ambientLight.intensity = 2.5;
+    } else {
+      scene.background.set(0x0c0c0e);
+      scene.fog.color.set(0x0c0c0e);
+      floorMat.color.set(0x070709);
+      ambientLight.color.set(0x383844);
+      ambientLight.intensity = 1.8;
+    }
+  });
+
   // 5. Exact Spline Control Points
   const REF_CONTROL_POINTS = [
     new THREE.Vector3(-6.5, Y_MID,  4.5),
@@ -7738,7 +8270,7 @@ fonts.catch(function(){}).then(function(){return document.fonts?document.fonts.r
         const cardW = card1.offsetWidth || 340;
         // Dynamically compute generous gap (52px to 82px) ensuring ZERO overlap
         const cardGap = clamp(vw * 0.038, 48, 75);
-        const deckSpread = cardW + cardGap;
+        const deckSpread = vw < 768 ? Math.min(cardW + 18, (vw - 20) * 0.85) : (cardW + cardGap);
 
         // Deck base station movements
         const initialSpreadP = easeInOutCubic(clamp(progress / 0.12, 0, 1));
@@ -7915,18 +8447,40 @@ fonts.catch(function(){}).then(function(){return document.fonts?document.fonts.r
 
       if (!section || !stage || !lamp || !heroCard || !threeSectionsDeck) return;
 
-      // 1. CLICK LAMP TO TOGGLE BLACK <-> PURE WHITE STUDIO BACKGROUND
-      let isWhiteMode = false;
-      lamp.addEventListener('click', (e) => {
-        e.stopPropagation();
-        isWhiteMode = !isWhiteMode;
-        stage.classList.toggle('white-mode', isWhiteMode);
-        section.classList.toggle('white-mode', isWhiteMode);
+      // 1. FUNCTIONAL GLOBAL THEME TOGGLE: LAMP CLICK (DARK <-> LIGHT)
+      let isLightTheme = false;
+
+      function setGlobalTheme(toLight) {
+        isLightTheme = !!toLight;
+        document.body.classList.toggle('light-theme', isLightTheme);
+        document.documentElement.classList.toggle('light-theme', isLightTheme);
+        stage.classList.toggle('white-mode', isLightTheme);
+        section.classList.toggle('white-mode', isLightTheme);
+        lamp.classList.toggle('lamp-on', isLightTheme);
+
+        // Tactile bounce feedback
+        lamp.classList.remove('lamp-toggling');
+        void lamp.offsetWidth; // trigger reflow
+        lamp.classList.add('lamp-toggling');
+        setTimeout(() => lamp.classList.remove('lamp-toggling'), 450);
+
         const hint = lamp.querySelector('.lamp-click-hint');
         if (hint) {
-          hint.textContent = isWhiteMode ? 'Click Lamp for Dark Studio' : 'Click Lamp for White Studio';
+          hint.textContent = isLightTheme ? 'Click Lamp for Dark Theme' : 'Click Lamp for Light Theme';
         }
+
+        // Notify other interactive components (Three.js canvas, particle canvas)
+        window.dispatchEvent(new CustomEvent('themetoggle', { detail: { isLight: isLightTheme } }));
+      }
+
+      lamp.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setGlobalTheme(!isLightTheme);
       });
+
+      // Expose globally for testing/automation
+      window.__toggleGlobalTheme = (light) => setGlobalTheme(light !== undefined ? light : !isLightTheme);
+      window.__toggleSlide5Lamp = () => lamp.click();
 
       // 2. BIDIRECTIONAL SCROLL & DRAG SYNCHRONIZATION
       // Progress: 0.0 (Hero Card) -> 1.0 (Three Sections Deck Revealed)

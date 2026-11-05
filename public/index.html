@@ -111,7 +111,7 @@
 
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;800&family=Fredoka:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@800;900&family=Cinzel:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;800&family=Fredoka:wght@700&display=swap" rel="stylesheet">
 
 
 
@@ -400,7 +400,7 @@ a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offs
   height: 52%;
 }
 
-/* Layer 2: Giant Black PORTFOLIO Typography with Wavy Particle Effect */
+/* Layer 2: Giant Black Typography & Original Particle Canvas */
 .hero-typography-layer {
   position: absolute;
   inset: 0;
@@ -412,42 +412,30 @@ a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offs
   overflow: hidden;
 }
 
-.hero-portfolio-text {
-  font-family: 'Anton', 'Barlow Condensed', 'Bebas Neue', sans-serif;
-  font-weight: 900;
-  font-size: clamp(60px, 12.8vw, 205px);
-  line-height: 0.85;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #000000;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  max-width: 95vw;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0 clamp(10px, 1.8vw, 36px);
-  transform: translateY(-2%);
-  filter: url(#heroLiquidFilter);
-  will-change: transform, filter;
-  user-select: none;
-}
-
-.hero-name-part {
-  display: inline-block;
-  white-space: nowrap;
-}
-
 .hero-particle-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 12;
-  mix-blend-mode: multiply;
-  opacity: 0.85;
+  z-index: 10;
+  animation: fade 1.2s .3s both;
+}
+
+.hero-editorial-subtext {
+  position: absolute;
+  left: clamp(24px, 4vw, 56px);
+  bottom: clamp(100px, 19vh, 180px);
+  z-index: 15;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  font-size: clamp(9px, 0.72vw, 11px);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  line-height: 1.5;
+  color: #777777;
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
 }
 
 /* Layer 3: Model Foreground Canvas */
@@ -550,25 +538,11 @@ a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offs
   .hero-nav-links {
     gap: 14px;
   }
-  .hero-typography-layer {
-    align-items: flex-start;
-    padding-top: 17vh;
-  }
-  .hero-portfolio-text {
-    flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
-    font-size: clamp(40px, 12vw, 54px) !important;
-    letter-spacing: 0.12em !important;
-    gap: 4px !important;
-    transform: none !important;
-    padding: 0 !important;
-    text-align: center !important;
-  }
-  .hero-name-part {
-    display: block !important;
-    width: 100% !important;
-    text-align: center !important;
+  .hero-editorial-subtext {
+    left: 20px;
+    bottom: 12vh;
+    font-size: 8.5px;
+    letter-spacing: 0.18em;
   }
   .hero-canvas-container {
     height: 65vh;
@@ -4760,17 +4734,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
 
 
-<!-- SVG Liquid Wave Distortion Filter -->
-<svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
-  <defs>
-    <filter id="heroLiquidFilter" x="-20%" y="-20%" width="140%" height="140%">
-      <feTurbulence id="heroWaveNoise" type="fractalNoise" baseFrequency="0.0055 0.0110" numOctaves="2" seed="5" result="noise" />
-      <feDisplacementMap id="heroWaveMap" in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" result="wavy" />
-    </filter>
-  </defs>
-</svg>
-
-<!-- REDESIGNED HERO SECTION (Pinned Scroll Track, Pure White #FFFFFF, Massive PORTFOLIO, Real Video Model) -->
+<!-- REDESIGNED HERO SECTION (Pinned Scroll Track, Pure White #FFFFFF, Reference Typography, Original Particle Animation) -->
 <header class="hero-pinned-track" id="top">
   <div class="hero-sticky-stage" id="heroStage">
 
@@ -4791,14 +4755,14 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       </a>
     </div>
 
-    <!-- LAYER 2: Giant Black Typography & Liquid Wavy Particle Canvas -->
+    <!-- LAYER 2: Giant Reference Typography & Original Particle Canvas -->
     <div class="hero-typography-layer">
-      <h1 class="hero-portfolio-text" id="heroText" aria-label="Kevin Samuel">
-        <span class="hero-name-part hero-name-first">K E V I N</span>
-        <span class="hero-name-part hero-name-last">S A M U E L</span>
-      </h1>
-      <canvas id="heroParticleCanvas" class="hero-particle-canvas"></canvas>
+      <h1 class="sr">Kevin Samuel</h1>
+      <canvas id="heroParticleCanvas" class="hero-particle-canvas" aria-hidden="true"></canvas>
     </div>
+
+    <!-- Minimal Editorial Subtitle from Reference Reel -->
+    <div class="hero-editorial-subtext">FROM PROFILE<br>TO PRESENCE</div>
 
     <!-- LAYER 3: Model Foreground Canvas (Original Video Human Scrubbing) -->
     <div class="hero-model-layer">
@@ -5784,15 +5748,16 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
 
 // ============================================================
-// HERO SECTION CONTROLLER (Scroll-Driven Model Scrubbing + Liquid Wavy Particle Effect)
+// HERO SECTION CONTROLLER (Scroll-Driven Model Scrubbing + Original Particle Typography Engine)
+// Matching exact reference typography: Anton font, KEVIN SAMUEL
+// Interactive repulsion physics: pointermove, pointerdown, scroll reaction
+// Spring return k=0.055, friction=0.86, settles perfectly back to home
 // ============================================================
 (function() {
   const track = document.getElementById('top');
   const stage = document.getElementById('heroStage');
   const canvas = document.getElementById('heroModelCanvas');
   const particleCanvas = document.getElementById('heroParticleCanvas');
-  const waveNoise = document.getElementById('heroWaveNoise');
-  const waveMap = document.getElementById('heroWaveMap');
   const scrollFill = document.getElementById('heroScrollFill');
   const videoElem = document.getElementById('heroVideo');
 
@@ -5826,7 +5791,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     frames.push(img);
   }
 
-  function resize() {
+  function resizeModel() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const containerH = stage.clientHeight * (window.innerWidth < 768 ? 0.65 : 0.94);
     const containerW = containerH * (16 / 9);
@@ -5834,21 +5799,10 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     canvas.style.height = containerH + 'px';
     canvas.width = containerW * dpr;
     canvas.height = containerH * dpr;
-    
-    // Particle canvas resize
-    if (particleCanvas) {
-      const pW = stage.clientWidth;
-      const pH = stage.clientHeight;
-      particleCanvas.width = pW * dpr;
-      particleCanvas.height = pH * dpr;
-    }
 
     renderedFrameIndex = -1;
     renderFrame(currentProgress);
   }
-
-  window.addEventListener('resize', resize);
-  resize();
 
   function renderFrame(progress) {
     const rawIdx = Math.round(progress * (TOTAL_FRAMES - 1));
@@ -5876,63 +5830,204 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     }
   }
 
-  // 2. Liquid Wavy Particle Canvas with Interactive Physics & Return to Home
-  let pCtx = particleCanvas ? particleCanvas.getContext('2d') : null;
-  let particles = [];
-  const P_COUNT = 90;
+  // ============================================================
+  // 2. ORIGINAL PARTICLE TYPOGRAPHY ENGINE (Restored from og.html)
+  // Matching exact reference typography: Anton font, KEVIN SAMUEL
+  // Interactive repulsion physics: pointermove, pointerdown, scroll reaction
+  // Spring return k=0.055, friction=0.86, settles perfectly back to home
+  // ============================================================
+  const pCtx = particleCanvas ? particleCanvas.getContext('2d') : null;
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-  function initParticles() {
-    particles = [];
-    const pW = stage.clientWidth || window.innerWidth;
-    const pH = stage.clientHeight || window.innerHeight;
-    for (let i = 0; i < P_COUNT; i++) {
-      const hx = Math.random() * pW;
-      const hy = pH * 0.32 + Math.random() * (pH * 0.36);
-      particles.push({
-        hx: hx,
-        hy: hy,
-        x: hx,
-        y: hy,
-        vx: 0,
-        vy: 0,
-        size: Math.random() * 2.2 + 0.8,
-        alpha: Math.random() * 0.32 + 0.14,
-        waveOffset: Math.random() * Math.PI * 2
-      });
+  let px, py, hx, hy, vx, vy;
+  let pCount = 0;
+  let pDpr = 1;
+  let pW = 0, pH = 0;
+  let pSize = 1.6;
+  let pRadius = 90;
+  let pMouseX = -9999, pMouseY = -9999;
+  let pRaf = 0;
+  const pColor = '#000000';
+
+  function buildParticles() {
+    if (!particleCanvas || !stage) return;
+    pDpr = Math.min(window.devicePixelRatio || 1, 2);
+    pW = stage.clientWidth || window.innerWidth;
+    pH = stage.clientHeight || window.innerHeight;
+    const mob = pW < 768;
+
+    particleCanvas.style.width = pW + 'px';
+    particleCanvas.style.height = pH + 'px';
+    particleCanvas.width = pW * pDpr;
+    particleCanvas.height = pH * pDpr;
+
+    // Offscreen canvas for typography rasterization
+    const off = document.createElement('canvas');
+    off.width = pW * pDpr;
+    off.height = pH * pDpr;
+    const c = off.getContext('2d');
+
+    c.fillStyle = '#000000';
+    c.textBaseline = 'middle';
+
+    const textY = pH * pDpr * 0.48; // Centered vertically behind model
+
+    if (mob) {
+      const fs = Math.round(pW * 0.24);
+      c.font = (fs * pDpr) + 'px "Anton", "Barlow Condensed", sans-serif';
+      c.textAlign = 'center';
+      c.fillText('KEVIN', pW * pDpr / 2, textY - (fs * pDpr * 0.58));
+      c.fillText('SAMUEL', pW * pDpr / 2, textY + (fs * pDpr * 0.58));
+    } else {
+      let fs = Math.min(Math.round(pH * 0.42), Math.round(pW * 0.18));
+      c.font = (fs * pDpr) + 'px "Anton", "Barlow Condensed", sans-serif';
+
+      const m1 = c.measureText('KEVIN').width;
+      const m2 = c.measureText('SAMUEL').width;
+      const spaceGap = Math.max(m1 * 0.38, pW * pDpr * 0.16); // Gap flanking central model
+
+      let totalSpan = m1 + spaceGap + m2;
+      const maxSpan = pW * pDpr * 0.94;
+      if (totalSpan > maxSpan) {
+        fs = Math.floor(fs * maxSpan / totalSpan);
+        c.font = (fs * pDpr) + 'px "Anton", "Barlow Condensed", sans-serif';
+        const newM1 = c.measureText('KEVIN').width;
+        const newM2 = c.measureText('SAMUEL').width;
+        const newGap = Math.max(newM1 * 0.38, pW * pDpr * 0.16);
+        totalSpan = newM1 + newGap + newM2;
+        const startX = (pW * pDpr - totalSpan) / 2;
+        c.textAlign = 'left';
+        c.fillText('KEVIN', startX, textY);
+        c.fillText('SAMUEL', startX + newM1 + newGap, textY);
+      } else {
+        const startX = (pW * pDpr - totalSpan) / 2;
+        c.textAlign = 'left';
+        c.fillText('KEVIN', startX, textY);
+        c.fillText('SAMUEL', startX + m1 + spaceGap, textY);
+      }
+    }
+
+    const imgData = c.getImageData(0, 0, off.width, off.height).data;
+    let gap = mob ? 1.7 : 1.8;
+
+    for (;;) {
+      const step = Math.max(1, Math.round(gap * pDpr));
+      const xs = [];
+      const ys = [];
+      for (let y = 0; y < off.height; y += step) {
+        for (let x = 0; x < off.width; x += step) {
+          if (imgData[(y * off.width + x) * 4 + 3] > 128) {
+            xs.push(x / pDpr);
+            ys.push(y / pDpr);
+          }
+        }
+      }
+      if (xs.length <= (mob ? 16000 : 32000)) {
+        pCount = xs.length;
+        hx = Float32Array.from(xs);
+        hy = Float32Array.from(ys);
+        px = Float32Array.from(xs);
+        py = Float32Array.from(ys);
+        vx = new Float32Array(pCount);
+        vy = new Float32Array(pCount);
+        break;
+      }
+      gap += 0.2;
+    }
+
+    pSize = Math.max(1.3, gap * 0.88);
+    pRadius = mob ? 65 : Math.max(80, pW * 0.075);
+
+    drawParticles();
+  }
+
+  function drawParticles() {
+    if (!pCtx) return;
+    pCtx.setTransform(pDpr, 0, 0, pDpr, 0, 0);
+    pCtx.clearRect(0, 0, pW, pH);
+    pCtx.fillStyle = pColor;
+    for (let i = 0; i < pCount; i++) {
+      pCtx.fillRect(px[i], py[i], pSize, pSize);
     }
   }
-  initParticles();
 
-  // 3. Interactive Pointer & Scroll Tracking
-  let mouseX = -9999, mouseY = -9999;
-  let lastMouseX = -9999, lastMouseY = -9999;
-  let mouseSpeed = 0;
-  let mouseInteraction = 0;
-  let isPointerOver = false;
+  function tickParticles() {
+    const R2 = pRadius * pRadius;
+    const k = 0.055;
+    const f = 0.86;
+    let rest = true;
 
-  stage.addEventListener('pointermove', (e) => {
-    const rect = stage.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    if (lastMouseX > -9000) {
-      const d = Math.hypot(x - lastMouseX, y - lastMouseY);
-      mouseSpeed += (d - mouseSpeed) * 0.4;
+    for (let i = 0; i < pCount; i++) {
+      const dx = px[i] - pMouseX;
+      const dy = py[i] - pMouseY;
+      const d2 = dx * dx + dy * dy;
+
+      if (d2 < R2) {
+        const d = Math.sqrt(d2) || 1;
+        let F = (1 - d / pRadius);
+        F = F * F * 7;
+        vx[i] += (dx / d) * F + (Math.random() - 0.5) * F * 0.7;
+        vy[i] += (dy / d) * F + (Math.random() - 0.5) * F * 0.7;
+      }
+
+      vx[i] += (hx[i] - px[i]) * k;
+      vy[i] += (hy[i] - py[i]) * k;
+      vx[i] *= f;
+      vy[i] *= f;
+      px[i] += vx[i];
+      py[i] += vy[i];
+
+      if (rest && (Math.abs(vx[i]) > 0.02 || Math.abs(vy[i]) > 0.02 || Math.abs(hx[i] - px[i]) > 0.05)) {
+        rest = false;
+      }
     }
-    lastMouseX = x;
-    lastMouseY = y;
-    mouseX = x;
-    mouseY = y;
-    isPointerOver = true;
-  }, { passive: true });
 
-  stage.addEventListener('pointerleave', () => {
-    isPointerOver = false;
-    mouseX = -9999;
-    mouseY = -9999;
-    lastMouseX = -9999;
-    lastMouseY = -9999;
-  }, { passive: true });
+    drawParticles();
 
+    if (rest && pMouseX < -999) {
+      pRaf = 0;
+      for (let i = 0; i < pCount; i++) {
+        px[i] = hx[i];
+        py[i] = hy[i];
+      }
+      drawParticles();
+      return;
+    }
+
+    pRaf = requestAnimationFrame(tickParticles);
+  }
+
+  function goParticles() {
+    if (!pRaf && !reduce) {
+      pRaf = requestAnimationFrame(tickParticles);
+    }
+  }
+
+  function movePointer(e) {
+    if (!stage) return;
+    const r = stage.getBoundingClientRect();
+    pMouseX = e.clientX - r.left;
+    pMouseY = e.clientY - r.top;
+    if (pMouseX > -pRadius && pMouseX < pW + pRadius && pMouseY > -pRadius && pMouseY < pH + pRadius) {
+      goParticles();
+    }
+  }
+
+  function leavePointer() {
+    pMouseX = -9999;
+    pMouseY = -9999;
+    goParticles();
+  }
+
+  stage.addEventListener('pointermove', movePointer, { passive: true });
+  stage.addEventListener('pointerdown', movePointer, { passive: true });
+  window.addEventListener('pointerup', function(e) {
+    if (e.pointerType === 'touch') leavePointer();
+  });
+  window.addEventListener('pointercancel', leavePointer);
+  document.addEventListener('pointerleave', leavePointer);
+
+  // 3. Scroll Tracking & Subtle Particle Wave Impulse
   function updateScroll() {
     const rect = track.getBoundingClientRect();
     const maxScroll = track.offsetHeight - window.innerHeight;
@@ -5944,16 +6039,10 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   window.addEventListener('scroll', updateScroll, { passive: true });
   updateScroll();
 
-  // 4. Animation, Interactive Liquid Wave & Particle Physics Loop
-  let lastTime = 0;
-  let wavePhase = 0;
-  const RESTING_SCALE = 2.5;
-  let currentScale = RESTING_SCALE;
+  // 4. Animation Loop for Model Scrubbing & Scroll-Particle Synchronization
+  let lastProgress = 0;
 
-  function loop(timestamp) {
-    const dt = (timestamp - lastTime) * 0.001 || 0.016;
-    lastTime = timestamp;
-
+  function loop() {
     const lerpFactor = 0.14;
     currentProgress += (targetProgress - currentProgress) * lerpFactor;
 
@@ -5967,90 +6056,55 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       videoElem.currentTime = currentProgress * videoElem.duration;
     }
 
-    // Interactive pointer velocity decay & wave modulation
-    const scrollVel = Math.abs(targetProgress - currentProgress);
-    if (isPointerOver) {
-      mouseSpeed *= 0.88;
-      mouseInteraction = Math.max(0.06, Math.min(1.0, mouseSpeed * 0.04));
-    } else {
-      mouseInteraction += (0 - mouseInteraction) * 0.08;
-    }
-
-    // Dynamic wave scale: expands during scroll or pointer movement, returns smoothly to RESTING_SCALE
-    const targetScale = RESTING_SCALE + scrollVel * 140 + mouseInteraction * 32;
-    currentScale += (targetScale - currentScale) * 0.12;
-
-    wavePhase += dt * (0.75 + scrollVel * 3.5 + mouseInteraction * 1.8);
-
-    if (waveNoise && waveMap) {
-      const baseFreqX = (0.0055 + 0.0015 * Math.sin(wavePhase + currentProgress * 2.8)).toFixed(4);
-      const baseFreqY = (0.0110 + 0.0025 * Math.cos(wavePhase * 1.4 + currentProgress * 2.0)).toFixed(4);
-      
-      waveNoise.setAttribute('baseFrequency', `${baseFreqX} ${baseFreqY}`);
-      waveMap.setAttribute('scale', currentScale.toFixed(2));
-    }
-
-    // Particle Canvas with spring return-to-home physics
-    if (pCtx && particleCanvas) {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      pCtx.save();
-      pCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const pW = stage.clientWidth;
-      const pH = stage.clientHeight;
-      pCtx.clearRect(0, 0, pW, pH);
-
-      const R = 140;
-      const R2 = R * R;
-      const springK = 0.045;
-      const friction = 0.86;
-
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-
-        // Pointer repulsion
-        if (isPointerOver && mouseX > -9000) {
-          const dx = p.x - mouseX;
-          const dy = p.y - mouseY;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < R2 && d2 > 0) {
-            const d = Math.sqrt(d2);
-            const F = (1 - d / R) * 8.5;
-            p.vx += (dx / d) * F;
-            p.vy += (dy / d) * F;
-          }
-        }
-
-        // Scroll turbulence impulse
-        if (scrollVel > 0.002) {
-          p.vx += (Math.random() - 0.5) * scrollVel * 35;
-          p.vy += (Math.random() - 0.5) * scrollVel * 18;
-        }
-
-        // Home anchor with gentle organic wave drift
-        const anchorX = p.hx + Math.sin(wavePhase + p.waveOffset) * 10;
-        const anchorY = p.hy + Math.cos(wavePhase * 1.2 + p.waveOffset) * 7;
-
-        // Spring return to home position
-        p.vx += (anchorX - p.x) * springK;
-        p.vy += (anchorY - p.y) * springK;
-        p.vx *= friction;
-        p.vy *= friction;
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        pCtx.beginPath();
-        pCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        pCtx.fillStyle = `rgba(0, 0, 0, ${p.alpha})`;
-        pCtx.fill();
+    // Gentle particle reaction on scroll
+    const scrollDelta = Math.abs(currentProgress - lastProgress);
+    if (scrollDelta > 0.0015 && pCount > 0) {
+      const impulse = Math.min(2.5, scrollDelta * 35);
+      for (let i = 0; i < pCount; i += 3) {
+        const wave = Math.sin(hx[i] * 0.02 + currentProgress * 8);
+        vy[i] += wave * impulse * 0.4 + (Math.random() - 0.5) * impulse * 0.3;
+        vx[i] += (Math.random() - 0.5) * impulse * 0.25;
       }
-      pCtx.restore();
+      goParticles();
     }
+    lastProgress = currentProgress;
 
     requestAnimationFrame(loop);
   }
 
   requestAnimationFrame(loop);
+
+  // Resize handler
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    resizeModel();
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (pRaf) {
+        cancelAnimationFrame(pRaf);
+        pRaf = 0;
+      }
+      buildParticles();
+    }, 150);
+  });
+
+  resizeModel();
+
+  // Load Anton font and initialize particles immediately & on font ready
+  buildParticles();
+
+  if (document.fonts) {
+    if (document.fonts.load) {
+      document.fonts.load('100px Anton').then(() => {
+        buildParticles();
+      }).catch(() => {});
+    }
+    if (document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        buildParticles();
+      }).catch(() => {});
+    }
+  }
 
   window.__setHeroProgress = (p) => {
     targetProgress = p;

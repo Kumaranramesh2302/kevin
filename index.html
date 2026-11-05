@@ -5089,9 +5089,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         </div>
         <div class="film-hud-bottom">
           <div class="film-info-panel" id="filmInfoPanel" title="Click to open video">
-            <div class="film-info-index" id="filmIndex">REEL 01 / 09</div>
-            <h2 class="film-info-title" id="filmTitle">BLUEPRINT ORIGIN</h2>
-            <div class="film-info-desc" id="filmDesc">CINEMATIC IDENTITY & ART DIRECTION</div>
+            <div class="film-info-index" id="filmIndex">Reel 01</div>
             <div class="film-info-panel-hint">
               <span>▶ CLICK FILM TO WATCH</span>
             </div>
@@ -5109,9 +5107,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         <div class="film-modal-container">
           <div class="film-modal-header">
             <div class="film-modal-meta">
-              <span class="film-modal-badge" id="modalBadge">REEL 01 / 07</span>
-              <h3 class="film-modal-title" id="modalTitle">BLUEPRINT ORIGIN</h3>
-              <p class="film-modal-desc" id="modalDesc">CINEMATIC IDENTITY & ART DIRECTION</p>
+              <span class="film-modal-badge" id="modalBadge">Reel 01</span>
             </div>
             <button class="film-modal-close" id="modalCloseBtn" aria-label="Close video pop-up">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -6650,18 +6646,10 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       ctx.lineWidth = 1.5;
       ctx.strokeRect(apLeft, apTop, apW, apH);
 
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '700 22px -apple-system, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(VIDEOS[videoIdx].title, CW / 2, CH / 2 - 12);
-
       ctx.fillStyle = 'rgba(235, 180, 50, 0.9)';
-      ctx.font = '600 13px monospace';
-      ctx.fillText(`REEL ${String(frameNum).padStart(2, '0')} // MOTION ARCHIVE`, CW / 2, CH / 2 + 16);
-
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.42)';
-      ctx.font = '11px -apple-system, monospace';
-      ctx.fillText(VIDEOS[videoIdx].desc, CW / 2, CH / 2 + 38);
+      ctx.font = '600 15px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(`REEL ${String(frameNum).padStart(2, '0')}`, CW / 2, CH / 2);
       ctx.textAlign = 'left';
     }
 
@@ -7141,10 +7129,10 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         vid.play().catch(() => {});
       }
 
-      const meta = VIDEOS[activeVideoIndex];
-      if (filmIndex) filmIndex.textContent = `REEL ${String(activeVideoIndex + 1).padStart(2, '0')} / 09`;
-      if (filmTitle) filmTitle.textContent = meta.title;
-      if (filmDesc) filmDesc.textContent = meta.desc;
+      const reelNum = String(activeVideoIndex + 1).padStart(2, '0');
+      if (filmIndex) filmIndex.textContent = `Reel ${reelNum}`;
+      if (filmTitle) filmTitle.textContent = '';
+      if (filmDesc) filmDesc.textContent = '';
     }
 
     for (let k = 0; k < TOTAL_FRAMES; k++) {
@@ -7280,9 +7268,9 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     const v = VIDEOS[idx];
     const reelNum = String(idx + 1).padStart(2, '0');
 
-    if (modalBadge) modalBadge.textContent = `REEL ${reelNum} / 07`;
-    if (modalTitle) modalTitle.textContent = v.title;
-    if (modalDesc) modalDesc.textContent = v.desc;
+    if (modalBadge) modalBadge.textContent = `Reel ${reelNum}`;
+    if (modalTitle) modalTitle.textContent = '';
+    if (modalDesc) modalDesc.textContent = '';
     if (modalCounter) modalCounter.textContent = `${reelNum} OF 07`;
 
     const videoSrc = resolveVideoSrc(v.file);

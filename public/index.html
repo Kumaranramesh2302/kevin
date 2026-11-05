@@ -4509,7 +4509,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       .story-deck-section {
         overflow: visible !important;
         overflow-x: clip !important;
-        --card-h: clamp(420px, 58vh, 490px) !important;
+        --card-h: clamp(270px, 46vh, 350px) !important;
         --card-w: calc(var(--card-h) * (779 / 1347)) !important;
         --card-gap: 16px !important;
       }
@@ -4632,7 +4632,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         max-width: 38vw !important;
       }
       .story-deck-section {
-        --card-h: clamp(400px, 56vh, 490px) !important;
+        --card-h: clamp(270px, 46vh, 350px) !important;
         --card-w: calc(var(--card-h) * (779 / 1347)) !important;
       }
       .hero-card-panel {
@@ -6071,8 +6071,13 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
   function resizeModel() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const containerH = stage.clientHeight * (window.innerWidth < 768 ? 0.65 : 0.94);
-    const containerW = containerH * (16 / 9);
+    const isMob = window.innerWidth < 768;
+    let containerH = stage.clientHeight * (isMob ? 0.62 : 0.94);
+    let containerW = containerH * (16 / 9);
+    if (isMob && containerW > window.innerWidth * 1.85) {
+      containerW = window.innerWidth * 1.85;
+      containerH = containerW * (9 / 16);
+    }
     canvas.style.width = containerW + 'px';
     canvas.style.height = containerH + 'px';
     canvas.width = containerW * dpr;
@@ -6133,12 +6138,19 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     const textY = sH * dpr * (mob ? 0.48 : 0.585); // Exact reference alignment across sunglasses and beard
 
     if (mob) {
-      const fs = Math.round(sW * 0.24);
+      let fs = Math.min(Math.round(sW * 0.19), Math.round(sH * 0.105));
       tCtx.font = (fs * dpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
       tCtx.letterSpacing = '-0.01em';
+      const maxW = (sW - 40) * dpr;
+      let mSamuel = tCtx.measureText('SAMUEL').width;
+      if (mSamuel > maxW) {
+        fs = Math.floor(fs * maxW / mSamuel);
+        tCtx.font = (fs * dpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
+      }
       tCtx.textAlign = 'center';
-      tCtx.fillText('KEVIN', sW * dpr / 2, textY - (fs * dpr * 0.55));
-      tCtx.fillText('SAMUEL', sW * dpr / 2, textY + (fs * dpr * 0.55));
+      const gapY = fs * dpr * 0.54;
+      tCtx.fillText('KEVIN', sW * dpr / 2, textY - gapY);
+      tCtx.fillText('SAMUEL', sW * dpr / 2, textY + gapY);
     } else {
       let fs = Math.min(Math.round(sH * 0.43), Math.round(sW * 0.175));
       tCtx.font = (fs * dpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
@@ -6344,7 +6356,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       };
     }
 
-    // 13 Calibrated Organic Layout: 0 model overlap, 0 card overlap, 100% inside frame
+    // 13 Calibrated Organic Layout: 0 model overlap, 0 card overlap, 100% inside frame (Desktop)
     const CARD_LAYOUT = [
       { dx: -0.365, dy: -0.290, rot: -4, pic: 13, name: 'far_top_left' },
       { dx: -0.230, dy: -0.270, rot:  3, pic: 12, name: 'inner_top_left' },
@@ -6361,37 +6373,78 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       { dx: +0.310, dy: -0.285, rot: -2, pic:  1, name: 'top_right_anchor' },
     ];
 
+    // 13 Calibrated Organic Layout: 0 model overlap, 0 card overlap, 100% inside frame (Mobile Portrait)
+    const MOBILE_CARD_LAYOUT = [
+      // 3 Top cards cleanly positioned above central model
+      { nx: -0.28, ny: -0.24, rot: -4, pic: 13 },
+      { nx:  0.00, ny: -0.26, rot:  2, pic: 12 },
+      { nx: +0.28, ny: -0.24, rot:  3, pic:  1 },
+      // 3 Left flank cards (completely clear of model and camera)
+      { nx: -0.38, ny: -0.13, rot:  2, pic:  9 },
+      { nx: -0.38, ny:  0.00, rot: -3, pic:  4 },
+      { nx: -0.38, ny: +0.13, rot:  3, pic:  3 },
+      // 3 Right flank cards (completely clear of model and camera)
+      { nx: +0.38, ny: -0.13, rot: -2, pic:  7 },
+      { nx: +0.38, ny:  0.00, rot:  3, pic:  2 },
+      { nx: +0.38, ny: +0.13, rot: -3, pic:  6 },
+      // 4 Bottom shelf cards
+      { nx: -0.30, ny: +0.26, rot: -2, pic: 10 },
+      { nx: -0.10, ny: +0.29, rot:  2, pic:  8 },
+      { nx: +0.10, ny: +0.29, rot: -2, pic: 11 },
+      { nx: +0.30, ny: +0.26, rot:  1, pic:  5 },
+    ];
+
     function getCardConfig(i, W, H) {
-      const scale = Math.min(W / 1920, H / 1080);
-      const dW = 1920 * scale;
-      const dH = 1080 * scale;
+      const isMobile = W < 768;
       const cx = W / 2;
       const cy = H / 2;
 
-      // Dynamically scale card sizes with comfortable margins
-      const cardW = Math.min(106, Math.max(68, W * 0.056));
-      const cardH = cardW * 1.25;
+      if (isMobile) {
+        // Dedicated mobile portrait calibration
+        const cardW = Math.round(Math.min(62, Math.max(46, W * 0.15)));
+        const cardH = Math.round(cardW * 1.25);
+        const camX = cx;
+        const camY = cy + 15; // Camera lens position in center
+        const slot = MOBILE_CARD_LAYOUT[i] || MOBILE_CARD_LAYOUT[0];
+        const targetX = cx + W * slot.nx;
+        const targetY = cy + H * slot.ny;
+        const ctrlX = camX + (targetX - camX) * 0.5;
+        const ctrlY = camY + (targetY - camY) * 0.4 - 20;
 
-      const camX = cx;
-      const camY = (H - dH) / 2 + dH * (680 / 1080);
+        return {
+          target: { x: targetX, y: targetY },
+          control: { x: ctrlX, y: ctrlY },
+          cam: { x: camX, y: camY },
+          cardW: cardW,
+          cardH: cardH,
+          flightTilt: slot.rot * 1.8,
+          settledTilt: slot.rot
+        };
+      } else {
+        // Desktop widescreen calibration
+        const scale = Math.min(W / 1920, H / 1080);
+        const dW = 1920 * scale;
+        const dH = 1080 * scale;
+        const cardW = Math.min(106, Math.max(68, W * 0.056));
+        const cardH = cardW * 1.25;
+        const camX = cx;
+        const camY = (H - dH) / 2 + dH * (680 / 1080);
+        const slot = CARD_LAYOUT[i] || CARD_LAYOUT[0];
+        const targetX = cx + dW * slot.dx;
+        const targetY = cy + dH * slot.dy;
+        const ctrlX = camX + (targetX - camX) * 0.45;
+        const ctrlY = camY + (targetY - camY) * 0.35 - 30;
 
-      const slot = CARD_LAYOUT[i] || CARD_LAYOUT[0];
-      const targetX = cx + dW * slot.dx;
-      const targetY = cy + dH * slot.dy;
-
-      // Organic outward flight trajectory from camera lens
-      const ctrlX = camX + (targetX - camX) * 0.45;
-      const ctrlY = camY + (targetY - camY) * 0.35 - 30;
-
-      return {
-        target: { x: targetX, y: targetY },
-        control: { x: ctrlX, y: ctrlY },
-        cam: { x: camX, y: camY },
-        cardW: cardW,
-        cardH: cardH,
-        flightTilt: slot.rot * 1.8,
-        settledTilt: slot.rot
-      };
+        return {
+          target: { x: targetX, y: targetY },
+          control: { x: ctrlX, y: ctrlY },
+          cam: { x: camX, y: camY },
+          cardW: cardW,
+          cardH: cardH,
+          flightTilt: slot.rot * 1.8,
+          settledTilt: slot.rot
+        };
+      }
     }
 
     // Camera Flash Optical Burst
@@ -6443,13 +6496,27 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         videoStarted = false;
         videoFinished = false;
         flashFiredOnVideo = false;
-        photogVideo.currentTime = 0;
+        try { photogVideo.currentTime = 0; } catch(e) {}
       }
 
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      const VIDEO_PHASE_END = 0.22;
+      const vDur = photogVideo.duration || 6.3;
 
-
-      // STRICT REQUIREMENT A & B: The original video must finish completely before photographs appear
-      if (!videoFinished) {
+      // Phase 1: Video phase synchronized with initial scroll or real-time playback
+      if (rawProgress < VIDEO_PHASE_END && !videoFinished) {
+        // Scrub video smoothly with scroll progress
+        const targetTime = (rawProgress / VIDEO_PHASE_END) * vDur;
+        if (Math.abs(photogVideo.currentTime - targetTime) > 0.06) {
+          try { photogVideo.currentTime = targetTime; } catch(e) {}
+        }
+        if (targetTime >= 6.0 && !flashFiredOnVideo) {
+          flashFiredOnVideo = true;
+          const cfg0 = getCardConfig(0, W, H);
+          triggerCameraFlash(cfg0.cam.x, cfg0.cam.y);
+        }
+        // Cards remain hidden during initial video raising/shooting phase
         for (let i = 0; i < cards.length; i++) {
           cards[i].style.opacity = '0';
           cards[i].style.visibility = 'hidden';
@@ -6458,13 +6525,19 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         return;
       }
 
-      // AFTER VIDEO FINISHES: Scroll reveals photographs one by one into exact CARD_LAYOUT
-      const W = window.innerWidth;
-      const H = window.innerHeight;
+      // Phase 2: Video is complete, ensure flash fired
+      if (!flashFiredOnVideo) {
+        flashFiredOnVideo = true;
+        const cfg0 = getCardConfig(0, W, H);
+        triggerCameraFlash(cfg0.cam.x, cfg0.cam.y);
+      }
+      if (photogVideo.duration && photogVideo.currentTime < photogVideo.duration) {
+        try { photogVideo.currentTime = photogVideo.duration; } catch(e) {}
+      }
 
-      // Span for sequential photograph emergence
-      const REVEAL_START = 0.03;
-      const REVEAL_END = 0.96;
+      // Sequential photograph emergence with comfortable settled viewing hold before Slide 3
+      const REVEAL_START = 0.22;
+      const REVEAL_END = 0.88;
       const SLICE_SPAN = (REVEAL_END - REVEAL_START) / cards.length;
       const FLIGHT_RATIO = 0.85;
       // Picture emergence (no flash on card release per user instruction)
@@ -7638,10 +7711,11 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         const progress = clamp(scrolled / totalDist, 0, 1);
 
         const vw = window.innerWidth;
-        const cardW = card1.offsetWidth || 340;
-        // Dynamically compute generous gap (52px to 82px) ensuring ZERO overlap
+        const isMobile = vw < 768;
+        const cardW = card1.offsetWidth || (isMobile ? 180 : 340);
+        // Dynamically compute generous gap ensuring ZERO overlap
         const cardGap = clamp(vw * 0.038, 48, 75);
-        const deckSpread = vw < 768 ? Math.min(cardW + 18, (vw - 20) * 0.85) : (cardW + cardGap);
+        const deckSpread = isMobile ? Math.round(vw * 0.18) : (cardW + cardGap);
 
         // Deck base station movements
         const initialSpreadP = easeInOutCubic(clamp(progress / 0.12, 0, 1));

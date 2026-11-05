@@ -4647,6 +4647,157 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       }
     }
 
+
+/* ============================================================
+   SLIDE 6: CONTACT SECTION (LET'S CREATE SOMETHING)
+   Exact match to reference image typography, box layout & animations
+   ============================================================ */
+.contact-section {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: #FFFFFF !important;
+  color: #111111;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(64px, 10vh, 120px) clamp(28px, 6vw, 110px) clamp(44px, 6vh, 72px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.contact-inner-container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
+/* Main Left-Aligned Heading */
+.contact-main {
+  width: 100%;
+  margin-top: clamp(16px, 3vh, 50px);
+}
+
+.contact-heading {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: clamp(48px, 8.2vw, 124px);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: #111111;
+  margin: 0;
+  text-align: left;
+}
+
+.contact-line-wrap {
+  overflow: hidden;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.contact-line {
+  display: block;
+  transform: translateY(115%);
+  opacity: 0;
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease;
+  will-change: transform, opacity;
+}
+
+.contact-line.revealed {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.contact-period {
+  color: #111111;
+}
+
+/* Bottom Small Information Boxes (Exact Reference Layout) */
+.contact-footer-wrap {
+  width: 100%;
+  margin-top: clamp(60px, 11vh, 160px);
+}
+
+.contact-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 64px);
+  width: 100%;
+}
+
+.contact-box {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(16px, 1.4vw, 22px) 0 clamp(8px, 0.8vw, 14px) 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.16);
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.contact-box.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.contact-box-label {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888888;
+  margin-bottom: 8px;
+}
+
+.contact-box-val {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(14px, 1.15vw, 18px);
+  font-weight: 600;
+  color: #111111;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  transition: color 0.2s ease, opacity 0.2s ease;
+  word-break: break-word;
+  display: inline-block;
+}
+
+.contact-box-val:hover {
+  color: #555555;
+  opacity: 0.8;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 56px 24px 40px;
+    min-height: 100svh;
+  }
+  .contact-heading {
+    font-size: clamp(38px, 11.5vw, 60px);
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+  }
+  .contact-footer-wrap {
+    margin-top: 52px;
+  }
+  .contact-info-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .contact-box {
+    padding-top: 12px;
+  }
+}
+
 </style>
 
 
@@ -5649,43 +5800,44 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
   </section>
 
+  <!-- ============================================================
+       SLIDE 6: CONTACT SECTION (LET'S CREATE SOMETHING)
+       Exact match to reference image
+       ============================================================ -->
+  <section class="contact-section" id="contact" aria-label="Contact Section - Let's Create Something">
+    <div class="contact-inner-container">
+      <div class="contact-main">
+        <div class="contact-heading" role="heading" aria-level="2">
+          <div class="contact-line-wrap">
+            <span class="contact-line contact-line-1">LET'S</span>
+          </div>
+          <div class="contact-line-wrap">
+            <span class="contact-line contact-line-2">CREATE</span>
+          </div>
+          <div class="contact-line-wrap">
+            <span class="contact-line contact-line-3">SOMETHING<span class="contact-period">.</span></span>
+          </div>
+        </div>
+      </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      <div class="contact-footer-wrap">
+        <div class="contact-info-grid">
+          <div class="contact-box" data-reveal="1">
+            <span class="contact-box-label">Phone</span>
+            <a href="tel:+919944126465" class="contact-box-val">+91 99441 26465</a>
+          </div>
+          <div class="contact-box" data-reveal="2">
+            <span class="contact-box-label">Email</span>
+            <a href="mailto:Kevinsamuel054@gmail.com" class="contact-box-val">Kevinsamuel054@gmail.com</a>
+          </div>
+          <div class="contact-box" data-reveal="3">
+            <span class="contact-box-label">Instagram</span>
+            <a href="https://www.instagram.com/kevvvnn__/" target="_blank" rel="noopener noreferrer" class="contact-box-val">@kevvvnn__</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 <script>
 
@@ -7647,7 +7799,66 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         applyProgress(p);
       };
     })();
-  </script>
+  
+    // ============================================================
+    // SLIDE 6: CONTACT SECTION SCROLL REVEAL CONTROLLER
+    // Reveal LET'S first, CREATE second, SOMETHING third, and contact links progressively
+    // ============================================================
+    (function initContactSlide() {
+      const section = document.getElementById('contact');
+      if (!section) return;
+
+      const line1 = section.querySelector('.contact-line-1');
+      const line2 = section.querySelector('.contact-line-2');
+      const line3 = section.querySelector('.contact-line-3');
+      const boxes = section.querySelectorAll('.contact-box');
+
+      function checkScroll() {
+        const rect = section.getBoundingClientRect();
+        const vh = window.innerHeight;
+
+        // Progressive scroll thresholds as contact slide enters from bottom:
+        // 1. Reveal 'LET'S' first when slide is 88% into view
+        if (rect.top <= vh * 0.88) {
+          if (line1 && !line1.classList.contains('revealed')) line1.classList.add('revealed');
+        }
+        // 2. Reveal 'CREATE' second when slide scrolls further up (74% into view)
+        if (rect.top <= vh * 0.74) {
+          if (line2 && !line2.classList.contains('revealed')) line2.classList.add('revealed');
+        }
+        // 3. Reveal 'SOMETHING.' third when slide scrolls to 60% into view
+        if (rect.top <= vh * 0.60) {
+          if (line3 && !line3.classList.contains('revealed')) line3.classList.add('revealed');
+        }
+        // 4. Reveal contact links progressively when scrolled further (46% into view)
+        if (rect.top <= vh * 0.46) {
+          boxes.forEach((box, i) => {
+            if (!box.classList.contains('revealed')) {
+              setTimeout(() => {
+                box.classList.add('revealed');
+              }, i * 140);
+            }
+          });
+        }
+      }
+
+      window.addEventListener('scroll', checkScroll, { passive: true });
+      window.addEventListener('resize', checkScroll, { passive: true });
+      
+      // IntersectionObserver fallback for fast anchor jump (#contact)
+      if ('IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            checkScroll();
+          }
+        }, { threshold: [0.1, 0.3, 0.5, 0.7] });
+        obs.observe(section);
+      }
+
+      checkScroll();
+    })();
+
+</script>
 </body>
 
 

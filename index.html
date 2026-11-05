@@ -5700,17 +5700,17 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
 
 // ============================================================
-// HERO SECTION CONTROLLER (Scroll-Driven Model Scrubbing + Interactive Split-and-Rejoin Typography)
+// HERO SECTION CONTROLLER (Scroll-Driven Model Scrubbing + Static Reference Typography)
 // Exact typography matching "Hero font reference.png": KEVIN SAMUEL
-// Interactive Split-and-Rejoin: letters slice horizontally and separate in opposite directions
-// Subtle particle displacement along cut edges
-// Smooth spring rejoin when cursor moves away
+// Natural, small gap (~two character spaces) between KEVIN and SAMUEL
+// Completely static typography on cursor interaction (no particles, cuts, splits, or displacement)
+// Model scrub and all other hero styling preserved 100%
 // ============================================================
 (function() {
   const track = document.getElementById('top');
   const stage = document.getElementById('heroStage');
   const canvas = document.getElementById('heroModelCanvas');
-  const splitCanvas = document.getElementById('heroParticleCanvas');
+  const typoCanvas = document.getElementById('heroParticleCanvas');
   const scrollFill = document.getElementById('heroScrollFill');
   const videoElem = document.getElementById('heroVideo');
 
@@ -5784,211 +5784,66 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   }
 
   // ============================================================
-  // 2. INTERACTIVE SPLIT-AND-REJOIN TYPOGRAPHY ENGINE
+  // 2. STATIC HERO TYPOGRAPHY (Zero cursor effects, natural ~2-character gap)
   // ============================================================
-  const sCtx = splitCanvas ? splitCanvas.getContext('2d') : null;
-  const reduceMotion = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const tCtx = typoCanvas ? typoCanvas.getContext('2d') : null;
 
-  // Offscreen canvas for crisp base typography
-  const baseCanvas = document.createElement('canvas');
-  const baseCtx = baseCanvas.getContext('2d');
-
-  let sDpr = 1;
-  let sW = 0, sH = 0;
-  let textY = 0;
-  let textHeight = 0;
-  let textTop = 0, textBottom = 0;
-
-  // Split interaction state
-  let mouseX = -9999, mouseY = -9999;
-  let targetSplit = 0;
-  let currentSplit = 0;
-  let currentCutY = 0;
-  let targetCutY = 0;
-  const MAX_SPLIT = 16; // Light to medium separation (pixels)
-  const SPLIT_RADIUS = 340; // Horizontal radius of effect
-
-  // Edge particles along the slice line
-  const edgeParticles = [];
-  const EDGE_P_COUNT = 75;
-
-  function initEdgeParticles() {
-    edgeParticles.length = 0;
-    for (let i = 0; i < EDGE_P_COUNT; i++) {
-      edgeParticles.push({
-        relX: Math.random(),
-        side: Math.random() > 0.5 ? 1 : -1,
-        offsetY: (Math.random() - 0.5) * 6,
-        currentY: 0,
-        vy: 0,
-        size: Math.random() * 1.8 + 0.9,
-        alpha: Math.random() * 0.45 + 0.55
-      });
-    }
-  }
-  initEdgeParticles();
-
-  function buildBaseTypography() {
-    if (!splitCanvas || !stage) return;
-    sDpr = Math.min(window.devicePixelRatio || 1, 2);
-    sW = stage.clientWidth || window.innerWidth;
-    sH = stage.clientHeight || window.innerHeight;
+  function renderTypography() {
+    if (!typoCanvas || !stage || !tCtx) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const sW = stage.clientWidth || window.innerWidth;
+    const sH = stage.clientHeight || window.innerHeight;
     const mob = sW < 768;
 
-    splitCanvas.style.width = sW + 'px';
-    splitCanvas.style.height = sH + 'px';
-    splitCanvas.width = sW * sDpr;
-    splitCanvas.height = sH * sDpr;
+    typoCanvas.style.width = sW + 'px';
+    typoCanvas.style.height = sH + 'px';
+    typoCanvas.width = sW * dpr;
+    typoCanvas.height = sH * dpr;
 
-    baseCanvas.width = sW * sDpr;
-    baseCanvas.height = sH * sDpr;
+    tCtx.setTransform(1, 0, 0, 1, 0, 0);
+    tCtx.clearRect(0, 0, typoCanvas.width, typoCanvas.height);
+    tCtx.fillStyle = '#000000';
+    tCtx.textBaseline = 'middle';
 
-    baseCtx.clearRect(0, 0, baseCanvas.width, baseCanvas.height);
-    baseCtx.fillStyle = '#000000';
-    baseCtx.textBaseline = 'middle';
-
-    textY = sH * sDpr * 0.47;
+    const textY = sH * dpr * 0.47;
 
     if (mob) {
       const fs = Math.round(sW * 0.24);
-      baseCtx.font = (fs * sDpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
-      baseCtx.letterSpacing = '-0.01em';
-      baseCtx.textAlign = 'center';
-      baseCtx.fillText('KEVIN', sW * sDpr / 2, textY - (fs * sDpr * 0.58));
-      baseCtx.fillText('SAMUEL', sW * sDpr / 2, textY + (fs * sDpr * 0.58));
-      textHeight = fs * sDpr * 2.2;
-      textTop = textY - textHeight / 2;
-      textBottom = textY + textHeight / 2;
+      tCtx.font = (fs * dpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
+      tCtx.letterSpacing = '-0.01em';
+      tCtx.textAlign = 'center';
+      tCtx.fillText('KEVIN', sW * dpr / 2, textY - (fs * dpr * 0.58));
+      tCtx.fillText('SAMUEL', sW * dpr / 2, textY + (fs * dpr * 0.58));
     } else {
-      // Desktop: Scale to match "Hero font reference.png" exactly (~96% total width, ~42% height)
       let fs = Math.min(Math.round(sH * 0.43), Math.round(sW * 0.175));
-      baseCtx.font = (fs * sDpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
-      baseCtx.letterSpacing = '-0.01em';
+      tCtx.font = (fs * dpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
+      tCtx.letterSpacing = '-0.01em';
 
-      const m1 = baseCtx.measureText('KEVIN').width;
-      const m2 = baseCtx.measureText('SAMUEL').width;
-      const spaceGap = Math.max(m1 * 0.36, sW * sDpr * 0.16); // Gap where central model stands
+      const m1 = tCtx.measureText('KEVIN').width;
+      const m2 = tCtx.measureText('SAMUEL').width;
+      const spaceGap = Math.round(tCtx.measureText('  ').width * 1.25); // ~Two normal character spaces
 
       let totalSpan = m1 + spaceGap + m2;
-      const maxSpan = sW * sDpr * 0.96;
+      const maxSpan = sW * dpr * 0.96;
       if (totalSpan > maxSpan) {
         fs = Math.floor(fs * maxSpan / totalSpan);
-        baseCtx.font = (fs * sDpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
-        const nm1 = baseCtx.measureText('KEVIN').width;
-        const nm2 = baseCtx.measureText('SAMUEL').width;
-        const ng = Math.max(nm1 * 0.36, sW * sDpr * 0.16);
+        tCtx.font = (fs * dpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
+        const nm1 = tCtx.measureText('KEVIN').width;
+        const nm2 = tCtx.measureText('SAMUEL').width;
+        const ng = Math.round(tCtx.measureText('  ').width * 1.25);
         totalSpan = nm1 + ng + nm2;
-        const startX = (sW * sDpr - totalSpan) / 2;
-        baseCtx.textAlign = 'left';
-        baseCtx.fillText('KEVIN', startX, textY);
-        baseCtx.fillText('SAMUEL', startX + nm1 + ng, textY);
+        const startX = (sW * dpr - totalSpan) / 2;
+        tCtx.textAlign = 'left';
+        tCtx.fillText('KEVIN', startX, textY);
+        tCtx.fillText('SAMUEL', startX + nm1 + ng, textY);
       } else {
-        const startX = (sW * sDpr - totalSpan) / 2;
-        baseCtx.textAlign = 'left';
-        baseCtx.fillText('KEVIN', startX, textY);
-        baseCtx.fillText('SAMUEL', startX + m1 + spaceGap, textY);
-      }
-
-      textHeight = fs * sDpr * 0.78;
-      textTop = textY - textHeight / 2;
-      textBottom = textY + textHeight / 2;
-    }
-
-    currentCutY = textY;
-    targetCutY = textY;
-    drawSplitScene();
-  }
-
-  function drawSplitScene() {
-    if (!sCtx) return;
-    sCtx.setTransform(1, 0, 0, 1, 0, 0);
-    sCtx.clearRect(0, 0, splitCanvas.width, splitCanvas.height);
-
-    // If motionless or split is zero, draw uncut base canvas directly
-    if (currentSplit < 0.2 || reduceMotion) {
-      sCtx.drawImage(baseCanvas, 0, 0);
-      return;
-    }
-
-    const scaledCutY = currentCutY;
-    const scaledMouseX = mouseX * sDpr;
-    const scaledRadius = SPLIT_RADIUS * sDpr;
-    const scaledSplit = currentSplit * sDpr;
-    const step = 4 * sDpr;
-    const W = splitCanvas.width;
-    const H = splitCanvas.height;
-
-    // Render slices column by column for smooth localized curve
-    for (let x = 0; x < W; x += step) {
-      const dist = Math.abs(x - scaledMouseX);
-      let s = 0;
-      if (dist < scaledRadius) {
-        const w = Math.pow(1 - dist / scaledRadius, 1.8);
-        s = scaledSplit * (0.2 + 0.8 * w);
-      }
-
-      if (s > 0.1) {
-        // Top half shifted UP by -s/2
-        sCtx.drawImage(baseCanvas, x, 0, step, scaledCutY, x, -s / 2, step, scaledCutY);
-        // Bottom half shifted DOWN by +s/2
-        sCtx.drawImage(baseCanvas, x, scaledCutY, step, H - scaledCutY, x, scaledCutY + s / 2, step, H - scaledCutY);
-      } else {
-        sCtx.drawImage(baseCanvas, x, 0, step, H, x, 0, step, H);
+        const startX = (sW * dpr - totalSpan) / 2;
+        tCtx.textAlign = 'left';
+        tCtx.fillText('KEVIN', startX, textY);
+        tCtx.fillText('SAMUEL', startX + m1 + spaceGap, textY);
       }
     }
-
-    // Render subtle edge particles along the split seam
-    sCtx.fillStyle = '#000000';
-    const spanStart = Math.max(0, scaledMouseX - scaledRadius * 0.85);
-    const spanWidth = Math.min(W, scaledMouseX + scaledRadius * 0.85) - spanStart;
-
-    for (let i = 0; i < edgeParticles.length; i++) {
-      const p = edgeParticles[i];
-      const px = spanStart + p.relX * spanWidth;
-      const dist = Math.abs(px - scaledMouseX);
-      if (dist < scaledRadius) {
-        const w = Math.pow(1 - dist / scaledRadius, 1.8);
-        const localSplit = scaledSplit * (0.2 + 0.8 * w);
-
-        const targetY = scaledCutY + (p.side * (localSplit * 0.45)) + p.offsetY;
-        p.vy += (targetY - (p.currentY || targetY)) * 0.15;
-        p.vy *= 0.8;
-        p.currentY = (p.currentY || targetY) + p.vy;
-
-        sCtx.globalAlpha = p.alpha * Math.min(1, currentSplit / 3);
-        sCtx.fillRect(px, p.currentY, p.size * sDpr, p.size * sDpr);
-      }
-    }
-    sCtx.globalAlpha = 1.0;
   }
-
-  // Pointer tracking for split-and-rejoin
-  function onPointerMove(e) {
-    const r = stage.getBoundingClientRect();
-    mouseX = e.clientX - r.left;
-    mouseY = e.clientY - r.top;
-
-    const dprMouseY = mouseY * sDpr;
-    // Check if cursor is over or near typography
-    if (dprMouseY >= textTop - 60 * sDpr && dprMouseY <= textBottom + 60 * sDpr) {
-      targetSplit = MAX_SPLIT;
-      targetCutY = Math.max(textTop + 20 * sDpr, Math.min(textBottom - 20 * sDpr, dprMouseY));
-    } else {
-      targetSplit = 0;
-    }
-  }
-
-  function onPointerLeave() {
-    targetSplit = 0;
-    mouseX = -9999;
-    mouseY = -9999;
-  }
-
-  stage.addEventListener('pointermove', onPointerMove, { passive: true });
-  stage.addEventListener('pointerdown', onPointerMove, { passive: true });
-  window.addEventListener('pointerup', onPointerLeave);
-  window.addEventListener('pointercancel', onPointerLeave);
-  document.addEventListener('pointerleave', onPointerLeave);
 
   // 3. Scroll Tracking
   function updateScroll() {
@@ -6002,7 +5857,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   window.addEventListener('scroll', updateScroll, { passive: true });
   updateScroll();
 
-  // 4. Animation Loop for Model Scrubbing & Split-and-Rejoin
+  // 4. Animation Loop for Model Scrubbing ONLY
   function loop() {
     const lerpFactor = 0.14;
     currentProgress += (targetProgress - currentProgress) * lerpFactor;
@@ -6017,16 +5872,6 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       videoElem.currentTime = currentProgress * videoElem.duration;
     }
 
-    // Smooth physics for split-and-rejoin
-    if (Math.abs(targetSplit - currentSplit) > 0.05 || currentSplit > 0.1) {
-      currentSplit += (targetSplit - currentSplit) * 0.14;
-      currentCutY += (targetCutY - currentCutY) * 0.12;
-      drawSplitScene();
-    } else if (currentSplit !== 0 && targetSplit === 0) {
-      currentSplit = 0;
-      drawSplitScene();
-    }
-
     requestAnimationFrame(loop);
   }
 
@@ -6038,24 +5883,24 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     resizeModel();
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      buildBaseTypography();
+      renderTypography();
     }, 150);
   });
 
   resizeModel();
 
-  // Load font and initialize typography
-  buildBaseTypography();
+  // Load font and initialize static typography
+  renderTypography();
 
   if (document.fonts) {
     if (document.fonts.load) {
       document.fonts.load('100px Anton').then(() => {
-        buildBaseTypography();
+        renderTypography();
       }).catch(() => {});
     }
     if (document.fonts.ready) {
       document.fonts.ready.then(() => {
-        buildBaseTypography();
+        renderTypography();
       }).catch(() => {});
     }
   }

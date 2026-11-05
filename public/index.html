@@ -378,27 +378,7 @@ a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offs
   gap: clamp(18px, 3vw, 42px);
 }
 
-.hero-soc-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: clamp(28px, 2.4vw, 36px);
-  height: clamp(28px, 2.4vw, 36px);
-  border-radius: 50%;
-  background: #111111;
-  color: #FFFFFF;
-  transition: transform 0.3s ease, background 0.3s ease;
-}
 
-.hero-soc-link:hover {
-  transform: scale(1.1);
-  background: #000000;
-}
-
-.hero-soc-link svg {
-  width: 52%;
-  height: 52%;
-}
 
 /* Layer 2: Giant Black Typography & Original Particle Canvas */
 .hero-typography-layer {
@@ -422,21 +402,6 @@ a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offs
   animation: fade 1.2s .3s both;
 }
 
-.hero-editorial-subtext {
-  position: absolute;
-  left: clamp(24px, 4vw, 56px);
-  bottom: clamp(100px, 19vh, 180px);
-  z-index: 15;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-  font-size: clamp(9px, 0.72vw, 11px);
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  line-height: 1.5;
-  color: #777777;
-  text-transform: uppercase;
-  pointer-events: none;
-  user-select: none;
-}
 
 /* Layer 3: Model Foreground Canvas */
 .hero-model-layer {
@@ -538,12 +503,7 @@ a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offs
   .hero-nav-links {
     gap: 14px;
   }
-  .hero-editorial-subtext {
-    left: 20px;
-    bottom: 12vh;
-    font-size: 8.5px;
-    letter-spacing: 0.18em;
-  }
+
   .hero-canvas-container {
     height: 65vh;
     max-height: 540px;
@@ -4746,13 +4706,6 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         <a href="#work">Work</a>
         <a href="#contact">Contact</a>
       </nav>
-      <a class="hero-soc-link" href="https://www.instagram.com/kevvvnn__" target="_blank" rel="noopener noreferrer" aria-label="Kevin Samuel on Instagram">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="18" height="18" rx="5"/>
-          <circle cx="12" cy="12" r="4"/>
-          <circle cx="17.3" cy="6.7" r=".6"/>
-        </svg>
-      </a>
     </div>
 
     <!-- LAYER 2: Giant Reference Typography & Original Particle Canvas -->
@@ -4761,8 +4714,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       <canvas id="heroParticleCanvas" class="hero-particle-canvas" aria-hidden="true"></canvas>
     </div>
 
-    <!-- Minimal Editorial Subtitle from Reference Reel -->
-    <div class="hero-editorial-subtext">FROM PROFILE<br>TO PRESENCE</div>
+
 
     <!-- LAYER 3: Model Foreground Canvas (Original Video Human Scrubbing) -->
     <div class="hero-model-layer">
@@ -5748,21 +5700,23 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
 
 // ============================================================
-// HERO SECTION CONTROLLER (Scroll-Driven Model Scrubbing + Original Particle Typography Engine)
-// Matching exact reference typography: Anton font, KEVIN SAMUEL
-// Interactive repulsion physics: pointermove, pointerdown, scroll reaction
-// Spring return k=0.055, friction=0.86, settles perfectly back to home
+// HERO SECTION CONTROLLER (Scroll-Driven Model Scrubbing + Interactive Split-and-Rejoin Typography)
+// Exact typography matching "Hero font reference.png": KEVIN SAMUEL
+// Interactive Split-and-Rejoin: letters slice horizontally and separate in opposite directions
+// Subtle particle displacement along cut edges
+// Smooth spring rejoin when cursor moves away
 // ============================================================
 (function() {
   const track = document.getElementById('top');
   const stage = document.getElementById('heroStage');
   const canvas = document.getElementById('heroModelCanvas');
-  const particleCanvas = document.getElementById('heroParticleCanvas');
+  const splitCanvas = document.getElementById('heroParticleCanvas');
   const scrollFill = document.getElementById('heroScrollFill');
   const videoElem = document.getElementById('heroVideo');
 
   if (!track || !stage || !canvas) return;
 
+  // 1. Existing Model Preload & Scrubbing (100% UNTOUCHED)
   const ctx = canvas.getContext('2d');
   const TOTAL_FRAMES = 143;
   const frames = [];
@@ -5771,7 +5725,6 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   let currentProgress = 0;
   let renderedFrameIndex = -1;
 
-  // 1. Preload transparent WebP frames extracted from hero section.mp4
   for (let i = 1; i <= TOTAL_FRAMES; i++) {
     const img = new Image();
     const pad = String(i).padStart(3, '0');
@@ -5831,203 +5784,213 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   }
 
   // ============================================================
-  // 2. ORIGINAL PARTICLE TYPOGRAPHY ENGINE (Restored from og.html)
-  // Matching exact reference typography: Anton font, KEVIN SAMUEL
-  // Interactive repulsion physics: pointermove, pointerdown, scroll reaction
-  // Spring return k=0.055, friction=0.86, settles perfectly back to home
+  // 2. INTERACTIVE SPLIT-AND-REJOIN TYPOGRAPHY ENGINE
   // ============================================================
-  const pCtx = particleCanvas ? particleCanvas.getContext('2d') : null;
-  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const sCtx = splitCanvas ? splitCanvas.getContext('2d') : null;
+  const reduceMotion = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-  let px, py, hx, hy, vx, vy;
-  let pCount = 0;
-  let pDpr = 1;
-  let pW = 0, pH = 0;
-  let pSize = 1.6;
-  let pRadius = 90;
-  let pMouseX = -9999, pMouseY = -9999;
-  let pRaf = 0;
-  const pColor = '#000000';
+  // Offscreen canvas for crisp base typography
+  const baseCanvas = document.createElement('canvas');
+  const baseCtx = baseCanvas.getContext('2d');
 
-  function buildParticles() {
-    if (!particleCanvas || !stage) return;
-    pDpr = Math.min(window.devicePixelRatio || 1, 2);
-    pW = stage.clientWidth || window.innerWidth;
-    pH = stage.clientHeight || window.innerHeight;
-    const mob = pW < 768;
+  let sDpr = 1;
+  let sW = 0, sH = 0;
+  let textY = 0;
+  let textHeight = 0;
+  let textTop = 0, textBottom = 0;
 
-    particleCanvas.style.width = pW + 'px';
-    particleCanvas.style.height = pH + 'px';
-    particleCanvas.width = pW * pDpr;
-    particleCanvas.height = pH * pDpr;
+  // Split interaction state
+  let mouseX = -9999, mouseY = -9999;
+  let targetSplit = 0;
+  let currentSplit = 0;
+  let currentCutY = 0;
+  let targetCutY = 0;
+  const MAX_SPLIT = 16; // Light to medium separation (pixels)
+  const SPLIT_RADIUS = 340; // Horizontal radius of effect
 
-    // Offscreen canvas for typography rasterization
-    const off = document.createElement('canvas');
-    off.width = pW * pDpr;
-    off.height = pH * pDpr;
-    const c = off.getContext('2d');
+  // Edge particles along the slice line
+  const edgeParticles = [];
+  const EDGE_P_COUNT = 75;
 
-    c.fillStyle = '#000000';
-    c.textBaseline = 'middle';
+  function initEdgeParticles() {
+    edgeParticles.length = 0;
+    for (let i = 0; i < EDGE_P_COUNT; i++) {
+      edgeParticles.push({
+        relX: Math.random(),
+        side: Math.random() > 0.5 ? 1 : -1,
+        offsetY: (Math.random() - 0.5) * 6,
+        currentY: 0,
+        vy: 0,
+        size: Math.random() * 1.8 + 0.9,
+        alpha: Math.random() * 0.45 + 0.55
+      });
+    }
+  }
+  initEdgeParticles();
 
-    const textY = pH * pDpr * 0.48; // Centered vertically behind model
+  function buildBaseTypography() {
+    if (!splitCanvas || !stage) return;
+    sDpr = Math.min(window.devicePixelRatio || 1, 2);
+    sW = stage.clientWidth || window.innerWidth;
+    sH = stage.clientHeight || window.innerHeight;
+    const mob = sW < 768;
+
+    splitCanvas.style.width = sW + 'px';
+    splitCanvas.style.height = sH + 'px';
+    splitCanvas.width = sW * sDpr;
+    splitCanvas.height = sH * sDpr;
+
+    baseCanvas.width = sW * sDpr;
+    baseCanvas.height = sH * sDpr;
+
+    baseCtx.clearRect(0, 0, baseCanvas.width, baseCanvas.height);
+    baseCtx.fillStyle = '#000000';
+    baseCtx.textBaseline = 'middle';
+
+    textY = sH * sDpr * 0.47;
 
     if (mob) {
-      const fs = Math.round(pW * 0.24);
-      c.font = (fs * pDpr) + 'px "Anton", "Barlow Condensed", sans-serif';
-      c.textAlign = 'center';
-      c.fillText('KEVIN', pW * pDpr / 2, textY - (fs * pDpr * 0.58));
-      c.fillText('SAMUEL', pW * pDpr / 2, textY + (fs * pDpr * 0.58));
+      const fs = Math.round(sW * 0.24);
+      baseCtx.font = (fs * sDpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
+      baseCtx.letterSpacing = '-0.01em';
+      baseCtx.textAlign = 'center';
+      baseCtx.fillText('KEVIN', sW * sDpr / 2, textY - (fs * sDpr * 0.58));
+      baseCtx.fillText('SAMUEL', sW * sDpr / 2, textY + (fs * sDpr * 0.58));
+      textHeight = fs * sDpr * 2.2;
+      textTop = textY - textHeight / 2;
+      textBottom = textY + textHeight / 2;
     } else {
-      let fs = Math.min(Math.round(pH * 0.42), Math.round(pW * 0.18));
-      c.font = (fs * pDpr) + 'px "Anton", "Barlow Condensed", sans-serif';
+      // Desktop: Scale to match "Hero font reference.png" exactly (~96% total width, ~42% height)
+      let fs = Math.min(Math.round(sH * 0.43), Math.round(sW * 0.175));
+      baseCtx.font = (fs * sDpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
+      baseCtx.letterSpacing = '-0.01em';
 
-      const m1 = c.measureText('KEVIN').width;
-      const m2 = c.measureText('SAMUEL').width;
-      const spaceGap = Math.max(m1 * 0.38, pW * pDpr * 0.16); // Gap flanking central model
+      const m1 = baseCtx.measureText('KEVIN').width;
+      const m2 = baseCtx.measureText('SAMUEL').width;
+      const spaceGap = Math.max(m1 * 0.36, sW * sDpr * 0.16); // Gap where central model stands
 
       let totalSpan = m1 + spaceGap + m2;
-      const maxSpan = pW * pDpr * 0.94;
+      const maxSpan = sW * sDpr * 0.96;
       if (totalSpan > maxSpan) {
         fs = Math.floor(fs * maxSpan / totalSpan);
-        c.font = (fs * pDpr) + 'px "Anton", "Barlow Condensed", sans-serif';
-        const newM1 = c.measureText('KEVIN').width;
-        const newM2 = c.measureText('SAMUEL').width;
-        const newGap = Math.max(newM1 * 0.38, pW * pDpr * 0.16);
-        totalSpan = newM1 + newGap + newM2;
-        const startX = (pW * pDpr - totalSpan) / 2;
-        c.textAlign = 'left';
-        c.fillText('KEVIN', startX, textY);
-        c.fillText('SAMUEL', startX + newM1 + newGap, textY);
+        baseCtx.font = (fs * sDpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
+        const nm1 = baseCtx.measureText('KEVIN').width;
+        const nm2 = baseCtx.measureText('SAMUEL').width;
+        const ng = Math.max(nm1 * 0.36, sW * sDpr * 0.16);
+        totalSpan = nm1 + ng + nm2;
+        const startX = (sW * sDpr - totalSpan) / 2;
+        baseCtx.textAlign = 'left';
+        baseCtx.fillText('KEVIN', startX, textY);
+        baseCtx.fillText('SAMUEL', startX + nm1 + ng, textY);
       } else {
-        const startX = (pW * pDpr - totalSpan) / 2;
-        c.textAlign = 'left';
-        c.fillText('KEVIN', startX, textY);
-        c.fillText('SAMUEL', startX + m1 + spaceGap, textY);
+        const startX = (sW * sDpr - totalSpan) / 2;
+        baseCtx.textAlign = 'left';
+        baseCtx.fillText('KEVIN', startX, textY);
+        baseCtx.fillText('SAMUEL', startX + m1 + spaceGap, textY);
       }
+
+      textHeight = fs * sDpr * 0.78;
+      textTop = textY - textHeight / 2;
+      textBottom = textY + textHeight / 2;
     }
 
-    const imgData = c.getImageData(0, 0, off.width, off.height).data;
-    let gap = mob ? 1.7 : 1.8;
-
-    for (;;) {
-      const step = Math.max(1, Math.round(gap * pDpr));
-      const xs = [];
-      const ys = [];
-      for (let y = 0; y < off.height; y += step) {
-        for (let x = 0; x < off.width; x += step) {
-          if (imgData[(y * off.width + x) * 4 + 3] > 128) {
-            xs.push(x / pDpr);
-            ys.push(y / pDpr);
-          }
-        }
-      }
-      if (xs.length <= (mob ? 16000 : 32000)) {
-        pCount = xs.length;
-        hx = Float32Array.from(xs);
-        hy = Float32Array.from(ys);
-        px = Float32Array.from(xs);
-        py = Float32Array.from(ys);
-        vx = new Float32Array(pCount);
-        vy = new Float32Array(pCount);
-        break;
-      }
-      gap += 0.2;
-    }
-
-    pSize = Math.max(1.3, gap * 0.88);
-    pRadius = mob ? 65 : Math.max(80, pW * 0.075);
-
-    drawParticles();
+    currentCutY = textY;
+    targetCutY = textY;
+    drawSplitScene();
   }
 
-  function drawParticles() {
-    if (!pCtx) return;
-    pCtx.setTransform(pDpr, 0, 0, pDpr, 0, 0);
-    pCtx.clearRect(0, 0, pW, pH);
-    pCtx.fillStyle = pColor;
-    for (let i = 0; i < pCount; i++) {
-      pCtx.fillRect(px[i], py[i], pSize, pSize);
-    }
-  }
+  function drawSplitScene() {
+    if (!sCtx) return;
+    sCtx.setTransform(1, 0, 0, 1, 0, 0);
+    sCtx.clearRect(0, 0, splitCanvas.width, splitCanvas.height);
 
-  function tickParticles() {
-    const R2 = pRadius * pRadius;
-    const k = 0.055;
-    const f = 0.86;
-    let rest = true;
-
-    for (let i = 0; i < pCount; i++) {
-      const dx = px[i] - pMouseX;
-      const dy = py[i] - pMouseY;
-      const d2 = dx * dx + dy * dy;
-
-      if (d2 < R2) {
-        const d = Math.sqrt(d2) || 1;
-        let F = (1 - d / pRadius);
-        F = F * F * 7;
-        vx[i] += (dx / d) * F + (Math.random() - 0.5) * F * 0.7;
-        vy[i] += (dy / d) * F + (Math.random() - 0.5) * F * 0.7;
-      }
-
-      vx[i] += (hx[i] - px[i]) * k;
-      vy[i] += (hy[i] - py[i]) * k;
-      vx[i] *= f;
-      vy[i] *= f;
-      px[i] += vx[i];
-      py[i] += vy[i];
-
-      if (rest && (Math.abs(vx[i]) > 0.02 || Math.abs(vy[i]) > 0.02 || Math.abs(hx[i] - px[i]) > 0.05)) {
-        rest = false;
-      }
-    }
-
-    drawParticles();
-
-    if (rest && pMouseX < -999) {
-      pRaf = 0;
-      for (let i = 0; i < pCount; i++) {
-        px[i] = hx[i];
-        py[i] = hy[i];
-      }
-      drawParticles();
+    // If motionless or split is zero, draw uncut base canvas directly
+    if (currentSplit < 0.2 || reduceMotion) {
+      sCtx.drawImage(baseCanvas, 0, 0);
       return;
     }
 
-    pRaf = requestAnimationFrame(tickParticles);
-  }
+    const scaledCutY = currentCutY;
+    const scaledMouseX = mouseX * sDpr;
+    const scaledRadius = SPLIT_RADIUS * sDpr;
+    const scaledSplit = currentSplit * sDpr;
+    const step = 4 * sDpr;
+    const W = splitCanvas.width;
+    const H = splitCanvas.height;
 
-  function goParticles() {
-    if (!pRaf && !reduce) {
-      pRaf = requestAnimationFrame(tickParticles);
+    // Render slices column by column for smooth localized curve
+    for (let x = 0; x < W; x += step) {
+      const dist = Math.abs(x - scaledMouseX);
+      let s = 0;
+      if (dist < scaledRadius) {
+        const w = Math.pow(1 - dist / scaledRadius, 1.8);
+        s = scaledSplit * (0.2 + 0.8 * w);
+      }
+
+      if (s > 0.1) {
+        // Top half shifted UP by -s/2
+        sCtx.drawImage(baseCanvas, x, 0, step, scaledCutY, x, -s / 2, step, scaledCutY);
+        // Bottom half shifted DOWN by +s/2
+        sCtx.drawImage(baseCanvas, x, scaledCutY, step, H - scaledCutY, x, scaledCutY + s / 2, step, H - scaledCutY);
+      } else {
+        sCtx.drawImage(baseCanvas, x, 0, step, H, x, 0, step, H);
+      }
     }
+
+    // Render subtle edge particles along the split seam
+    sCtx.fillStyle = '#000000';
+    const spanStart = Math.max(0, scaledMouseX - scaledRadius * 0.85);
+    const spanWidth = Math.min(W, scaledMouseX + scaledRadius * 0.85) - spanStart;
+
+    for (let i = 0; i < edgeParticles.length; i++) {
+      const p = edgeParticles[i];
+      const px = spanStart + p.relX * spanWidth;
+      const dist = Math.abs(px - scaledMouseX);
+      if (dist < scaledRadius) {
+        const w = Math.pow(1 - dist / scaledRadius, 1.8);
+        const localSplit = scaledSplit * (0.2 + 0.8 * w);
+
+        const targetY = scaledCutY + (p.side * (localSplit * 0.45)) + p.offsetY;
+        p.vy += (targetY - (p.currentY || targetY)) * 0.15;
+        p.vy *= 0.8;
+        p.currentY = (p.currentY || targetY) + p.vy;
+
+        sCtx.globalAlpha = p.alpha * Math.min(1, currentSplit / 3);
+        sCtx.fillRect(px, p.currentY, p.size * sDpr, p.size * sDpr);
+      }
+    }
+    sCtx.globalAlpha = 1.0;
   }
 
-  function movePointer(e) {
-    if (!stage) return;
+  // Pointer tracking for split-and-rejoin
+  function onPointerMove(e) {
     const r = stage.getBoundingClientRect();
-    pMouseX = e.clientX - r.left;
-    pMouseY = e.clientY - r.top;
-    if (pMouseX > -pRadius && pMouseX < pW + pRadius && pMouseY > -pRadius && pMouseY < pH + pRadius) {
-      goParticles();
+    mouseX = e.clientX - r.left;
+    mouseY = e.clientY - r.top;
+
+    const dprMouseY = mouseY * sDpr;
+    // Check if cursor is over or near typography
+    if (dprMouseY >= textTop - 60 * sDpr && dprMouseY <= textBottom + 60 * sDpr) {
+      targetSplit = MAX_SPLIT;
+      targetCutY = Math.max(textTop + 20 * sDpr, Math.min(textBottom - 20 * sDpr, dprMouseY));
+    } else {
+      targetSplit = 0;
     }
   }
 
-  function leavePointer() {
-    pMouseX = -9999;
-    pMouseY = -9999;
-    goParticles();
+  function onPointerLeave() {
+    targetSplit = 0;
+    mouseX = -9999;
+    mouseY = -9999;
   }
 
-  stage.addEventListener('pointermove', movePointer, { passive: true });
-  stage.addEventListener('pointerdown', movePointer, { passive: true });
-  window.addEventListener('pointerup', function(e) {
-    if (e.pointerType === 'touch') leavePointer();
-  });
-  window.addEventListener('pointercancel', leavePointer);
-  document.addEventListener('pointerleave', leavePointer);
+  stage.addEventListener('pointermove', onPointerMove, { passive: true });
+  stage.addEventListener('pointerdown', onPointerMove, { passive: true });
+  window.addEventListener('pointerup', onPointerLeave);
+  window.addEventListener('pointercancel', onPointerLeave);
+  document.addEventListener('pointerleave', onPointerLeave);
 
-  // 3. Scroll Tracking & Subtle Particle Wave Impulse
+  // 3. Scroll Tracking
   function updateScroll() {
     const rect = track.getBoundingClientRect();
     const maxScroll = track.offsetHeight - window.innerHeight;
@@ -6039,9 +6002,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   window.addEventListener('scroll', updateScroll, { passive: true });
   updateScroll();
 
-  // 4. Animation Loop for Model Scrubbing & Scroll-Particle Synchronization
-  let lastProgress = 0;
-
+  // 4. Animation Loop for Model Scrubbing & Split-and-Rejoin
   function loop() {
     const lerpFactor = 0.14;
     currentProgress += (targetProgress - currentProgress) * lerpFactor;
@@ -6056,18 +6017,15 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       videoElem.currentTime = currentProgress * videoElem.duration;
     }
 
-    // Gentle particle reaction on scroll
-    const scrollDelta = Math.abs(currentProgress - lastProgress);
-    if (scrollDelta > 0.0015 && pCount > 0) {
-      const impulse = Math.min(2.5, scrollDelta * 35);
-      for (let i = 0; i < pCount; i += 3) {
-        const wave = Math.sin(hx[i] * 0.02 + currentProgress * 8);
-        vy[i] += wave * impulse * 0.4 + (Math.random() - 0.5) * impulse * 0.3;
-        vx[i] += (Math.random() - 0.5) * impulse * 0.25;
-      }
-      goParticles();
+    // Smooth physics for split-and-rejoin
+    if (Math.abs(targetSplit - currentSplit) > 0.05 || currentSplit > 0.1) {
+      currentSplit += (targetSplit - currentSplit) * 0.14;
+      currentCutY += (targetCutY - currentCutY) * 0.12;
+      drawSplitScene();
+    } else if (currentSplit !== 0 && targetSplit === 0) {
+      currentSplit = 0;
+      drawSplitScene();
     }
-    lastProgress = currentProgress;
 
     requestAnimationFrame(loop);
   }
@@ -6080,28 +6038,24 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     resizeModel();
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      if (pRaf) {
-        cancelAnimationFrame(pRaf);
-        pRaf = 0;
-      }
-      buildParticles();
+      buildBaseTypography();
     }, 150);
   });
 
   resizeModel();
 
-  // Load Anton font and initialize particles immediately & on font ready
-  buildParticles();
+  // Load font and initialize typography
+  buildBaseTypography();
 
   if (document.fonts) {
     if (document.fonts.load) {
       document.fonts.load('100px Anton').then(() => {
-        buildParticles();
+        buildBaseTypography();
       }).catch(() => {});
     }
     if (document.fonts.ready) {
       document.fonts.ready.then(() => {
-        buildParticles();
+        buildBaseTypography();
       }).catch(() => {});
     }
   }

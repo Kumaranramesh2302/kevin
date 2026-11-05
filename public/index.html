@@ -3046,9 +3046,10 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       --card-ink: #1E1D1B;
       --card-muted: #555555;
       --card-line: rgba(30, 29, 27, 0.25);
-      --card-w: clamp(340px, 23vw, 410px);
-      --card-h: clamp(540px, 36vw, 640px);
-      --card-gap: clamp(48px, 3.8vw, 76px);
+      --card-aspect: calc(779 / 1347);
+      --card-h: clamp(460px, 58vh, 590px);
+      --card-w: calc(var(--card-h) * var(--card-aspect));
+      --card-gap: clamp(40px, 3.5vw, 64px);
       --deck-spread: calc(var(--card-w) + var(--card-gap));
     }
 
@@ -3345,7 +3346,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       justify-content: center;
       transform-style: preserve-3d;
       z-index: 10;
-      transform: translateY(38px);
+      transform: translateY(8px);
     }
 
     /* Physical Station Bases */
@@ -3368,17 +3369,18 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       position: relative;
       width: 100%;
       height: 100%;
-      border-radius: 16px;
-      background: #FAF8F5;
-      border: 1.5px solid #1E1D1B;
+      border-radius: 0;
+      background: transparent !important;
+      border: none !important;
       box-shadow:
-        0 1px 0 #E5E2D9, 0 2px 0 #D2CEC2,
-        0 3px 0 #E5E2D9, 0 4px 0 #D2CEC2,
-        0 5px 0 #E5E2D9, 0 6px 0 #D2CEC2,
-        0 7px 0 #E5E2D9, 0 8px 0 #D2CEC2,
-        0 9px 0 #E5E2D9, 0 10px 0 #D2CEC2,
+        0 1px 0 #282828, 0 2px 0 #1c1c1c,
+        0 3px 0 #282828, 0 4px 0 #1c1c1c,
+        0 5px 0 #282828, 0 6px 0 #1c1c1c,
+        0 7px 0 #282828, 0 8px 0 #1c1c1c,
+        0 9px 0 #282828, 0 10px 0 #1c1c1c,
         0 14px 28px rgba(0,0,0,0.85);
-      overflow: hidden;
+      overflow: visible;
+      transition: box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .deck-stack-thickness-side {
@@ -3387,10 +3389,12 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       right: -8px;
       width: 8px;
       height: 100%;
-      background: #DCD8CC;
+      background: #252525;
       transform: skewY(45deg);
       transform-origin: left top;
-      border-right: 1px solid #B5B0A2;
+      border-right: 1px solid #141414;
+      transition: background 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .deck-stack-thickness-bottom {
@@ -3399,10 +3403,12 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       left: 0;
       width: 100%;
       height: 8px;
-      background: #CCC7BA;
+      background: #1c1c1c;
       transform: skewX(45deg);
       transform-origin: left top;
-      border-bottom: 1px solid #9E998B;
+      border-bottom: 1px solid #101010;
+      transition: background 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .deck-label-pill {
@@ -3480,11 +3486,12 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       inset: 0;
       border-radius: 16px;
       box-shadow:
-        0 1px 0 #E5E2D9, 0 2px 0 #D2CEC2,
+        0 1px 0 #282828, 0 2px 0 #1c1c1c,
         0 12px 28px rgba(0, 0, 0, 0.65),
         0 20px 48px rgba(0, 0, 0, 0.75);
       pointer-events: none;
       z-index: -1;
+      transition: box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .card-face {
@@ -3492,21 +3499,20 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       inset: 0;
       width: 100%;
       height: 100%;
-      border-radius: 16px;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
     }
 
-    /* 1. OUTER CARD BACKSIDE: KEVIN SAMUEL KING PLAYING CARD */
+    /* 1. OUTER CARD BACKSIDE: KEVIN SAMUEL KING PLAYING CARD (PRESERVE EXACT DIMENSIONS & CORNERS) */
     .card-back {
       transform: rotateY(0deg);
-      background: #FAF8F5;
-      border: 1.5px solid #1E1D1B;
-      border-radius: 16px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.4);
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      overflow: visible !important;
       user-select: none;
     }
 
@@ -3515,14 +3521,50 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       inset: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      border-radius: 15px;
+      object-fit: contain !important;
+      object-position: center center;
+      border-radius: 0 !important;
       pointer-events: none;
       display: block;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity;
+    }
+
+    /* Dark Mode (Default): Black playing card official design */
+    .card-back-art.card-back-art-dark {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    /* Light Mode: White playing card official design (hidden by default) */
+    .card-back-art.card-back-art-light {
+      opacity: 0;
+      z-index: 1;
+    }
+
+    /* Seamless Theme Switching: Show White Card when in Light Mode */
+    .story-deck-section.light-theme .card-back-art.card-back-art-dark,
+    :root[data-theme="light"] .card-back-art.card-back-art-dark,
+    html[data-theme="light"] .card-back-art.card-back-art-dark,
+    body.light-theme .card-back-art.card-back-art-dark,
+    body.white-mode .card-back-art.card-back-art-dark,
+    .white-mode .card-back-art.card-back-art-dark {
+      opacity: 0 !important;
+      z-index: 1 !important;
+    }
+
+    .story-deck-section.light-theme .card-back-art.card-back-art-light,
+    :root[data-theme="light"] .card-back-art.card-back-art-light,
+    html[data-theme="light"] .card-back-art.card-back-art-light,
+    body.light-theme .card-back-art.card-back-art-light,
+    body.white-mode .card-back-art.card-back-art-light,
+    .white-mode .card-back-art.card-back-art-light {
+      opacity: 1 !important;
+      z-index: 2 !important;
     }
 
     .card-back-gold-rim {
-      display: none;
+      display: none !important;
     }
 
     /* 2. INNER CARD FRONT */
@@ -4346,17 +4388,52 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     .story-deck-section.light-theme .deck-luxury-bg-svg path {
       stroke: rgba(0, 0, 0, 0.08) !important;
     }
-    .story-deck-section.light-theme .card-face.card-front,
-    .story-deck-section.light-theme .card-face.card-back {
+    .story-deck-section.light-theme .card-face.card-front {
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.16), 0 3px 12px rgba(0, 0, 0, 0.08) !important;
     }
-    .story-deck-section.light-theme .deck-stack-block {
+    .story-deck-section.light-theme .card-face.card-back,
+    :root[data-theme="light"] .card-face.card-back,
+    body.light-theme .card-face.card-back,
+    .white-mode .card-face.card-back {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+    .story-deck-section.light-theme .deck-stack-block,
+    :root[data-theme="light"] .deck-stack-block,
+    body.light-theme .deck-stack-block,
+    .white-mode .deck-stack-block {
+      background: transparent !important;
+      border: none !important;
       box-shadow:
         0 1px 0 #D8D4C8, 0 2px 0 #C4C0B2,
         0 3px 0 #D8D4C8, 0 4px 0 #C4C0B2,
         0 5px 0 #D8D4C8, 0 6px 0 #C4C0B2,
         0 7px 0 #D8D4C8, 0 8px 0 #C4C0B2,
         0 14px 28px rgba(0,0,0,0.18) !important;
+    }
+    .story-deck-section.light-theme .deck-stack-thickness-side,
+    :root[data-theme="light"] .deck-stack-thickness-side,
+    body.light-theme .deck-stack-thickness-side,
+    .white-mode .deck-stack-thickness-side {
+      background: #DCD8CC !important;
+      border-right: 1px solid #B5B0A2 !important;
+    }
+    .story-deck-section.light-theme .deck-stack-thickness-bottom,
+    :root[data-theme="light"] .deck-stack-thickness-bottom,
+    body.light-theme .deck-stack-thickness-bottom,
+    .white-mode .deck-stack-thickness-bottom {
+      background: #CCC7BA !important;
+      border-bottom: 1px solid #9E998B !important;
+    }
+    .story-deck-section.light-theme .card-3d-flipper::after,
+    :root[data-theme="light"] .card-3d-flipper::after,
+    body.light-theme .card-3d-flipper::after,
+    .white-mode .card-3d-flipper::after {
+      box-shadow:
+        0 1px 0 #E5E2D9, 0 2px 0 #D2CEC2,
+        0 12px 28px rgba(0, 0, 0, 0.16),
+        0 20px 48px rgba(0, 0, 0, 0.22) !important;
     }
     .story-deck-section.light-theme .deck-nav-pills {
       background: rgba(255, 255, 255, 0.95) !important;
@@ -4496,11 +4573,11 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         font-size: 9.5px !important;
       }
 
-      /* Slide 4 (Playing Cards) */
+      /* Slide 4 (Playing Cards - Maintain Exact Reference Aspect Ratio) */
       .story-deck-section {
         overflow: hidden !important;
-        --card-w: clamp(265px, 78vw, 305px) !important;
-        --card-h: clamp(420px, 60vh, 480px) !important;
+        --card-h: clamp(420px, 58vh, 490px) !important;
+        --card-w: calc(var(--card-h) * (779 / 1347)) !important;
         --card-gap: 16px !important;
       }
       .deck-arena {
@@ -4622,8 +4699,8 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         max-width: 38vw !important;
       }
       .story-deck-section {
-        --card-w: min(290px, 88vw) !important;
-        --card-h: clamp(450px, 64vh, 520px) !important;
+        --card-h: clamp(400px, 56vh, 490px) !important;
+        --card-w: calc(var(--card-h) * (779 / 1347)) !important;
       }
       .hero-card-panel {
         width: min(300px, 92vw) !important;
@@ -5220,10 +5297,10 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
           <div class="deck-stack-block">
             <div class="deck-stack-thickness-side"></div>
             <div class="deck-stack-thickness-bottom"></div>
-            <!-- Permanent Kevin King playing card back -->
-            <div class="card-face card-back" style="position:absolute; inset:0; border-radius:16px;">
-              <img class="card-back-art" src="story_deck/kevin_king_card.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card.webp';}" alt="King Kevin Samuel" />
-              <div class="card-back-gold-rim"></div>
+            <!-- Permanent Kevin King playing card back (Dual Theme: Dark Default <-> Light) -->
+            <div class="card-face card-back" style="position:absolute; inset:0;">
+              <img class="card-back-art card-back-art-dark" src="story_deck/kevin_king_card_dark.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card_dark.webp';}" alt="King Kevin Samuel (Dark Theme)" />
+              <img class="card-back-art card-back-art-light" src="story_deck/kevin_king_card_light.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card_light.webp';}" alt="King Kevin Samuel (Light Theme)" />
             </div>
           </div>
           <div class="deck-label-pill" id="sourceDeckLabelPill">
@@ -5240,10 +5317,10 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
           <div class="deck-stack-block">
             <div class="deck-stack-thickness-side"></div>
             <div class="deck-stack-thickness-bottom"></div>
-            <!-- Permanent Kevin King playing card back -->
-            <div class="card-face card-back" style="position:absolute; inset:0; border-radius:16px;">
-              <img class="card-back-art" src="story_deck/kevin_king_card.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card.webp';}" alt="King Kevin Samuel" />
-              <div class="card-back-gold-rim"></div>
+            <!-- Permanent Kevin King playing card back (Dual Theme: Dark Default <-> Light) -->
+            <div class="card-face card-back" style="position:absolute; inset:0;">
+              <img class="card-back-art card-back-art-dark" src="story_deck/kevin_king_card_dark.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card_dark.webp';}" alt="King Kevin Samuel (Dark Theme)" />
+              <img class="card-back-art card-back-art-light" src="story_deck/kevin_king_card_light.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card_light.webp';}" alt="King Kevin Samuel (Light Theme)" />
             </div>
           </div>
           <div class="deck-label-pill" id="destDeckLabelPill">
@@ -5263,10 +5340,10 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
           <div class="card-stream-item" id="contentCard1" data-index="0">
             <div class="card-3d-flipper" id="cardFlipper1">
 
-              <!-- OUTER BACK: Untouched Kevin King playing card -->
+              <!-- OUTER BACK: Official Kevin King playing card (Dual Theme: Dark Default <-> Light) -->
               <div class="card-face card-back">
-                <img class="card-back-art" src="story_deck/kevin_king_card.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card.webp';}" alt="King Kevin Samuel" />
-                <div class="card-back-gold-rim"></div>
+                <img class="card-back-art card-back-art-dark" src="story_deck/kevin_king_card_dark.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card_dark.webp';}" alt="King Kevin Samuel (Dark Theme)" />
+                <img class="card-back-art card-back-art-light" src="story_deck/kevin_king_card_light.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card_light.webp';}" alt="King Kevin Samuel (Light Theme)" />
               </div>
 
               <!-- INNER FRONT: Professional Photography Workspace -->
@@ -5348,10 +5425,10 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
           <div class="card-stream-item" id="contentCard2" data-index="1">
             <div class="card-3d-flipper" id="cardFlipper2">
 
-              <!-- OUTER BACK: Untouched Kevin King playing card -->
+              <!-- OUTER BACK: Official Kevin King playing card (Dual Theme: Dark Default <-> Light) -->
               <div class="card-face card-back">
-                <img class="card-back-art" src="story_deck/kevin_king_card.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card.webp';}" alt="King Kevin Samuel" />
-                <div class="card-back-gold-rim"></div>
+                <img class="card-back-art card-back-art-dark" src="story_deck/kevin_king_card_dark.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card_dark.webp';}" alt="King Kevin Samuel (Dark Theme)" />
+                <img class="card-back-art card-back-art-light" src="story_deck/kevin_king_card_light.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card_light.webp';}" alt="King Kevin Samuel (Light Theme)" />
               </div>
 
               <!-- INNER FRONT: Professional Film Production Workspace -->
@@ -5431,10 +5508,10 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
           <div class="card-stream-item" id="contentCard3" data-index="2">
             <div class="card-3d-flipper" id="cardFlipper3">
 
-              <!-- OUTER BACK: Untouched Kevin King playing card -->
+              <!-- OUTER BACK: Official Kevin King playing card (Dual Theme: Dark Default <-> Light) -->
               <div class="card-face card-back">
-                <img class="card-back-art" src="story_deck/kevin_king_card.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card.webp';}" alt="King Kevin Samuel" />
-                <div class="card-back-gold-rim"></div>
+                <img class="card-back-art card-back-art-dark" src="story_deck/kevin_king_card_dark.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card_dark.webp';}" alt="King Kevin Samuel (Dark Theme)" />
+                <img class="card-back-art card-back-art-light" src="story_deck/kevin_king_card_light.webp" onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='public/story_deck/kevin_king_card_light.webp';}" alt="King Kevin Samuel (Light Theme)" />
               </div>
 
               <!-- INNER FRONT: Professional Editing & Post Suite -->
@@ -8333,6 +8410,16 @@ fonts.catch(function(){}).then(function(){return document.fonts?document.fonts.r
         e.stopPropagation();
         setLocalLampTheme(!isLocalLightMode);
       });
+
+      // Also allow clicking Slide 4 header to toggle theme smoothly
+      const hudTitleRow = document.querySelector('.deck-hud-title-row');
+      if (hudTitleRow) {
+        hudTitleRow.style.cursor = 'pointer';
+        hudTitleRow.setAttribute('title', 'Click to toggle Light / Dark theme');
+        hudTitleRow.addEventListener('click', () => {
+          setLocalLampTheme(!isLocalLightMode);
+        });
+      }
 
       // Expose globally for testing/automation
       window.__toggleLocalTheme = (light) => setLocalLampTheme(light !== undefined ? light : !isLocalLightMode);

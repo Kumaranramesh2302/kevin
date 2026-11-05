@@ -1927,11 +1927,11 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
 
 
-/* STRICT REQUIREMENT 4: All photographs MUST have identical dimensions matching sample.mp4 (4:5 ratio) with smooth anti-aliased edges */
+/* STRICT REQUIREMENT 4: All 13 photographs dynamically sized & positioned with generous margins */
 
 :root {
-  --photo-w: clamp(118px, 8.2vw, 150px);
-  --photo-h: clamp(147.5px, 10.25vw, 187.5px);
+  --photo-w: clamp(86px, 5.6vw, 106px);
+  --photo-h: clamp(107.5px, 7.0vw, 132.5px);
   --photo-radius: clamp(7px, 0.6vw, 10px);
 }
 
@@ -1948,26 +1948,18 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   pointer-events: none;
 }
 
-/* .photographer-cue removed */
-  50% { opacity: 0.35; transform: scale(0.85); }
-}
-
-
-
 @media (max-width: 1024px) {
   :root {
-    --photo-w: clamp(115px, 16vw, 160px);
-    --photo-h: clamp(144px, 20vw, 200px);
-    --photo-radius: 9px;
+    --photo-w: clamp(80px, 10vw, 102px);
+    --photo-h: clamp(100px, 12.5vw, 127.5px);
+    --photo-radius: 8px;
   }
 }
 
-
-
 @media (max-width: 768px) {
   :root {
-    --photo-w: clamp(86px, 22vw, 118px);
-    --photo-h: clamp(107.5px, 27.5vw, 147.5px);
+    --photo-w: clamp(68px, 16vw, 88px);
+    --photo-h: clamp(85px, 20vw, 110px);
     --photo-radius: 7px;
   }
 }
@@ -4719,7 +4711,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   color: #111111;
 }
 
-/* Bottom Small Information Boxes (Exact Reference Layout) */
+/* Bottom Interactive Link Boxes with Official Icons & Hover Pop-Out */
 .contact-footer-wrap {
   width: 100%;
   margin-top: clamp(60px, 11vh, 160px);
@@ -4735,17 +4727,65 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 .contact-box {
   display: flex;
   flex-direction: column;
-  padding: clamp(16px, 1.4vw, 22px) 0 clamp(8px, 0.8vw, 14px) 0;
+  padding: clamp(16px, 1.4vw, 22px) clamp(16px, 1.4vw, 20px) clamp(14px, 1vw, 18px);
   border-top: 1px solid rgba(0, 0, 0, 0.16);
+  border-radius: 8px;
+  background: transparent;
+  text-decoration: none;
+  color: #111111;
+  cursor: pointer;
+  box-sizing: border-box;
   opacity: 0;
-  transform: translateY(26px);
-  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+  transform: translateY(28px);
+  transition: 
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow, opacity;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .contact-box.revealed {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Hover pop out with subtle scale-up, shadow & border glow */
+.contact-box.revealed:hover {
+  transform: translateY(-6px) scale(1.025);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.03);
+  border-top-color: #111111;
+  background: #FFFFFF;
+}
+
+.contact-box:active {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+}
+
+.contact-box-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.contact-box-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: #888888;
+  transition: color 0.25s ease, transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.contact-box:hover .contact-box-icon {
+  color: #111111;
+  transform: scale(1.12);
 }
 
 .contact-box-label {
@@ -4755,7 +4795,11 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #888888;
-  margin-bottom: 8px;
+  transition: color 0.25s ease;
+}
+
+.contact-box:hover .contact-box-label {
+  color: #111111;
 }
 
 .contact-box-val {
@@ -4763,16 +4807,9 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   font-size: clamp(14px, 1.15vw, 18px);
   font-weight: 600;
   color: #111111;
-  text-decoration: none;
   letter-spacing: -0.01em;
-  transition: color 0.2s ease, opacity 0.2s ease;
   word-break: break-word;
-  display: inline-block;
-}
-
-.contact-box-val:hover {
-  color: #555555;
-  opacity: 0.8;
+  transition: color 0.25s ease;
 }
 
 /* Mobile Responsiveness */
@@ -4791,10 +4828,12 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   }
   .contact-info-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
   }
   .contact-box {
-    padding-top: 12px;
+    padding: 16px 16px 14px;
+    background: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
   }
 }
 
@@ -5818,18 +5857,42 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
       <div class="contact-footer-wrap">
         <div class="contact-info-grid">
-          <div class="contact-box" data-reveal="1">
-            <span class="contact-box-label">Phone</span>
-            <a href="tel:+919944126465" class="contact-box-val">+91 99441 26465</a>
-          </div>
-          <div class="contact-box" data-reveal="2">
-            <span class="contact-box-label">Email</span>
-            <a href="mailto:Kevinsamuel054@gmail.com" class="contact-box-val">Kevinsamuel054@gmail.com</a>
-          </div>
-          <div class="contact-box" data-reveal="3">
-            <span class="contact-box-label">Instagram</span>
-            <a href="https://www.instagram.com/kevvvnn__/" target="_blank" rel="noopener noreferrer" class="contact-box-val">@kevvvnn__</a>
-          </div>
+          <a href="tel:+919944126465" class="contact-box" data-reveal="1" aria-label="Call Kevin Samuel: +91 99441 26465">
+            <div class="contact-box-header">
+              <span class="contact-box-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              </span>
+              <span class="contact-box-label">Phone</span>
+            </div>
+            <span class="contact-box-val">+91 99441 26465</span>
+          </a>
+
+          <a href="mailto:Kevinsamuel054@gmail.com" class="contact-box" data-reveal="2" aria-label="Email Kevin Samuel: Kevinsamuel054@gmail.com">
+            <div class="contact-box-header">
+              <span class="contact-box-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+              </span>
+              <span class="contact-box-label">Email</span>
+            </div>
+            <span class="contact-box-val">Kevinsamuel054@gmail.com</span>
+          </a>
+
+          <a href="https://www.instagram.com/kevvvnn__/" target="_blank" rel="noopener noreferrer" class="contact-box" data-reveal="3" aria-label="Kevin Samuel on Instagram: @kevvvnn__">
+            <div class="contact-box-header">
+              <span class="contact-box-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </span>
+              <span class="contact-box-label">Instagram</span>
+            </div>
+            <span class="contact-box-val">@kevvvnn__</span>
+          </a>
         </div>
       </div>
     </div>
@@ -6171,21 +6234,21 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       };
     }
 
-    // 13 EXACT POSITIONS FROM REFERENCE IMAGE (media_1793654207711_5aa3ad41.png) - 100% UNTOUCHED
+    // 13 Calibrated Organic Layout: 0 model overlap, 0 card overlap, 100% inside frame
     const CARD_LAYOUT = [
-      { dx: -0.344, dy: -0.175, rot:  0, pic: 13, name: 'far_top_left' },
-      { dx: -0.158, dy: -0.157, rot: -4, pic: 12, name: 'inner_top_left' },
-      { dx: -0.391, dy: +0.038, rot:  0, pic:  9, name: 'far_mid_left' },
-      { dx: -0.199, dy: +0.112, rot:  4, pic:  4, name: 'inner_mid_left' },
-      { dx: -0.312, dy: +0.234, rot: -2, pic:  3, name: 'far_lower_left' },
-      { dx: -0.164, dy: +0.353, rot:  2, pic:  8, name: 'bottom_left' },
-      { dx: -0.010, dy: +0.395, rot:  0, pic: 10, name: 'bottom_center' },
-      { dx: +0.143, dy: +0.353, rot: -2, pic:  5, name: 'bottom_inner_right' },
-      { dx: +0.285, dy: +0.260, rot:  3, pic: 11, name: 'far_bottom_right' },
-      { dx: +0.180, dy: +0.138, rot: -3, pic:  6, name: 'inner_mid_right' },
-      { dx: +0.375, dy: +0.059, rot:  2, pic:  2, name: 'far_mid_right' },
-      { dx: +0.140, dy: -0.157, rot:  3, pic:  1, name: 'inner_top_right' },
-      { dx: +0.338, dy: -0.147, rot: -3, pic:  7, name: 'far_top_right' },
+      { dx: -0.365, dy: -0.290, rot: -4, pic: 13, name: 'far_top_left' },
+      { dx: -0.230, dy: -0.270, rot:  3, pic: 12, name: 'inner_top_left' },
+      { dx: -0.395, dy: -0.095, rot:  2, pic:  9, name: 'far_mid_left' },
+      { dx: -0.265, dy: -0.075, rot: -3, pic:  4, name: 'inner_mid_left' },
+      { dx: -0.375, dy: +0.110, rot: -2, pic:  3, name: 'far_lower_left' },
+      { dx: -0.245, dy: +0.130, rot:  3, pic:  8, name: 'inner_lower_left' },
+      { dx: -0.310, dy: +0.315, rot: -1, pic: 10, name: 'bottom_left_shelf' },
+      { dx: +0.310, dy: +0.315, rot:  1, pic:  5, name: 'bottom_right_shelf' },
+      { dx: +0.245, dy: +0.130, rot: -3, pic: 11, name: 'inner_lower_right' },
+      { dx: +0.375, dy: +0.110, rot:  2, pic:  6, name: 'far_lower_right' },
+      { dx: +0.265, dy: -0.075, rot:  3, pic:  2, name: 'inner_mid_right' },
+      { dx: +0.395, dy: -0.095, rot: -2, pic:  7, name: 'far_mid_right' },
+      { dx: +0.310, dy: -0.285, rot: -2, pic:  1, name: 'top_right_anchor' },
     ];
 
     function getCardConfig(i, W, H) {
@@ -6195,7 +6258,8 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       const cx = W / 2;
       const cy = H / 2;
 
-      const cardW = Math.min(148, Math.max(88, W * 0.076));
+      // Dynamically scale card sizes with comfortable margins
+      const cardW = Math.min(106, Math.max(68, W * 0.056));
       const cardH = cardW * 1.25;
 
       const camX = cx;
@@ -6311,6 +6375,8 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
           // Settled in exact position
           card.style.visibility = 'visible';
           card.style.opacity = '1';
+          card.style.width = cfg.cardW + 'px';
+          card.style.height = cfg.cardH + 'px';
           card.style.transform = `translate3d(${cfg.target.x - cfg.cardW / 2}px, ${cfg.target.y - cfg.cardH / 2}px, 0px) rotate(${cfg.settledTilt}deg) scale(1)`;
           card.classList.add('settled');
         } else {
@@ -6324,6 +6390,8 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
           card.style.visibility = 'visible';
           card.style.opacity = currentAlpha.toFixed(3);
+          card.style.width = cfg.cardW + 'px';
+          card.style.height = cfg.cardH + 'px';
           card.style.transform = `translate3d(${pt.x - cfg.cardW / 2}px, ${pt.y - cfg.cardH / 2}px, 0px) rotate(${currentTilt.toFixed(2)}deg) scale(${currentScale.toFixed(3)})`;
           card.classList.remove('settled');
         }
@@ -7789,8 +7857,10 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     })();
   
     // ============================================================
-    // SLIDE 6: CONTACT SECTION SCROLL REVEAL CONTROLLER
-    // Reveal LET'S first, CREATE second, SOMETHING third, and contact links progressively
+    // SLIDE 6: CONTACT SECTION SCROLL CONTROLLER (BI-DIRECTIONAL)
+    // Reveal individually on scroll down (LET'S -> CREATE -> SOMETHING. -> Phone -> Email -> Instagram)
+    // Reverse smoothly on scroll up with enter & exit detection
+    // Retriggers seamlessly upon scrolling down again
     // ============================================================
     (function initContactSlide() {
       const section = document.getElementById('contact');
@@ -7799,51 +7869,49 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       const line1 = section.querySelector('.contact-line-1');
       const line2 = section.querySelector('.contact-line-2');
       const line3 = section.querySelector('.contact-line-3');
-      const boxes = section.querySelectorAll('.contact-box');
+      const box1 = section.querySelector('.contact-box[data-reveal="1"]');
+      const box2 = section.querySelector('.contact-box[data-reveal="2"]');
+      const box3 = section.querySelector('.contact-box[data-reveal="3"]');
 
-      function checkScroll() {
+      const items = [
+        { el: line1, showThresh: 0.88, hideThresh: 0.92 },
+        { el: line2, showThresh: 0.74, hideThresh: 0.78 },
+        { el: line3, showThresh: 0.60, hideThresh: 0.64 },
+        { el: box1,  showThresh: 0.46, hideThresh: 0.50 },
+        { el: box2,  showThresh: 0.38, hideThresh: 0.42 },
+        { el: box3,  showThresh: 0.30, hideThresh: 0.34 },
+      ];
+
+      let ticking = false;
+
+      function updateReveal() {
+        ticking = false;
         const rect = section.getBoundingClientRect();
-        const vh = window.innerHeight;
+        const vh = window.innerHeight || 800;
 
-        // Progressive scroll thresholds as contact slide enters from bottom:
-        // 1. Reveal 'LET'S' first when slide is 88% into view
-        if (rect.top <= vh * 0.88) {
-          if (line1 && !line1.classList.contains('revealed')) line1.classList.add('revealed');
-        }
-        // 2. Reveal 'CREATE' second when slide scrolls further up (74% into view)
-        if (rect.top <= vh * 0.74) {
-          if (line2 && !line2.classList.contains('revealed')) line2.classList.add('revealed');
-        }
-        // 3. Reveal 'SOMETHING.' third when slide scrolls to 60% into view
-        if (rect.top <= vh * 0.60) {
-          if (line3 && !line3.classList.contains('revealed')) line3.classList.add('revealed');
-        }
-        // 4. Reveal contact links progressively when scrolled further (46% into view)
-        if (rect.top <= vh * 0.46) {
-          boxes.forEach((box, i) => {
-            if (!box.classList.contains('revealed')) {
-              setTimeout(() => {
-                box.classList.add('revealed');
-              }, i * 140);
-            }
-          });
-        }
-      }
-
-      window.addEventListener('scroll', checkScroll, { passive: true });
-      window.addEventListener('resize', checkScroll, { passive: true });
-      
-      // IntersectionObserver fallback for fast anchor jump (#contact)
-      if ('IntersectionObserver' in window) {
-        const obs = new IntersectionObserver((entries) => {
-          if (entries[0].isIntersecting) {
-            checkScroll();
+        items.forEach(item => {
+          if (!item.el) return;
+          const isRevealed = item.el.classList.contains('revealed');
+          if (!isRevealed && rect.top <= vh * item.showThresh) {
+            item.el.classList.add('revealed');
+          } else if (isRevealed && rect.top > vh * item.hideThresh) {
+            item.el.classList.remove('revealed');
           }
-        }, { threshold: [0.1, 0.3, 0.5, 0.7] });
-        obs.observe(section);
+        });
       }
 
-      checkScroll();
+      function onScroll() {
+        if (!ticking) {
+          requestAnimationFrame(updateReveal);
+          ticking = true;
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+
+      // Run initial check
+      updateReveal();
     })();
 
 </script>

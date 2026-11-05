@@ -6581,8 +6581,18 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       }
     }
 
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update, { passive: true });
+    let galleryTicking = false;
+    function onGalleryScroll() {
+      if (!galleryTicking) {
+        galleryTicking = true;
+        requestAnimationFrame(() => {
+          update();
+          galleryTicking = false;
+        });
+      }
+    }
+    window.addEventListener('scroll', onGalleryScroll, { passive: true });
+    window.addEventListener('resize', onGalleryScroll, { passive: true });
 
     // Gallery background click (flash on manual click disabled to prevent ghosting/glitches)
 
@@ -7466,10 +7476,16 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   function animate() {
     requestAnimationFrame(animate);
 
+    // Performance Optimization: Only render when Slide 3 is in or near the viewport
+    const rect = section.getBoundingClientRect();
+    if (rect.bottom < -150 || rect.top > (window.innerHeight || 800) + 150) {
+      return;
+    }
+
     if (paramProgress === null) {
       const delta = targetProgress - currentProgress;
       if (Math.abs(delta) > 0.0001) {
-        currentProgress += delta * 0.12;
+        currentProgress += delta * 0.14;
         applyProgress(currentProgress);
       }
     }
@@ -8058,12 +8074,12 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       const box3 = section.querySelector('.contact-box[data-reveal="3"]');
 
       const items = [
-        { el: line1, showThresh: 0.88, hideThresh: 0.92 },
-        { el: line2, showThresh: 0.74, hideThresh: 0.78 },
-        { el: line3, showThresh: 0.60, hideThresh: 0.64 },
-        { el: box1,  showThresh: 0.46, hideThresh: 0.50 },
-        { el: box2,  showThresh: 0.38, hideThresh: 0.42 },
-        { el: box3,  showThresh: 0.30, hideThresh: 0.34 },
+        { el: line1, threshold: 0.14 },
+        { el: line2, threshold: 0.24 },
+        { el: line3, threshold: 0.34 },
+        { el: box1,  threshold: 0.46 },
+        { el: box2,  threshold: 0.56 },
+        { el: box3,  threshold: 0.66 }
       ];
 
       let ticking = false;
@@ -8073,12 +8089,23 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         const rect = section.getBoundingClientRect();
         const vh = window.innerHeight || 800;
 
+        // Slide 6 entrance progress: 0 when top of section touches bottom of viewport, 1 when section top reaches top of viewport
+        const progress = (vh - rect.top) / vh;
+
+        // When scrolling back up so Slide 6 moves out of viewport, immediately reset all elements to hidden
+        if (progress <= 0.06 || rect.top >= vh * 0.95) {
+          items.forEach(item => {
+            if (item.el) item.el.classList.remove('revealed');
+          });
+          return;
+        }
+
+        // Bi-directional smooth reveal on scroll down & clean smooth disappearance on scroll up
         items.forEach(item => {
           if (!item.el) return;
-          const isRevealed = item.el.classList.contains('revealed');
-          if (!isRevealed && rect.top <= vh * item.showThresh) {
+          if (progress >= item.threshold) {
             item.el.classList.add('revealed');
-          } else if (isRevealed && rect.top > vh * item.hideThresh) {
+          } else {
             item.el.classList.remove('revealed');
           }
         });
@@ -8086,8 +8113,8 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
       function onScroll() {
         if (!ticking) {
-          requestAnimationFrame(updateReveal);
           ticking = true;
+          requestAnimationFrame(updateReveal);
         }
       }
 

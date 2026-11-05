@@ -5805,7 +5805,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     tCtx.fillStyle = '#000000';
     tCtx.textBaseline = 'middle';
 
-    const textY = sH * dpr * 0.565; // Positioned lower within the hero frame
+    const textY = sH * dpr * (mob ? 0.58 : 0.62); // Positioned lower within the hero frame
 
     if (mob) {
       const fs = Math.round(sW * 0.24);

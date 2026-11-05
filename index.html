@@ -413,22 +413,30 @@ a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offs
 }
 
 .hero-portfolio-text {
-  font-family: 'Bebas Neue', 'Anton', 'Syne', sans-serif;
+  font-family: 'Anton', 'Barlow Condensed', 'Bebas Neue', sans-serif;
   font-weight: 900;
-  font-size: clamp(74px, 17.5vw, 275px);
+  font-size: clamp(60px, 12.8vw, 205px);
   line-height: 0.85;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #000000;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
-  max-width: 96vw;
-  white-space: nowrap;
+  max-width: 95vw;
+  box-sizing: border-box;
   margin: 0;
-  padding: 0;
+  padding: 0 clamp(10px, 1.8vw, 36px);
   transform: translateY(-2%);
   filter: url(#heroLiquidFilter);
   will-change: transform, filter;
+  user-select: none;
+}
+
+.hero-name-part {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .hero-particle-canvas {
@@ -544,11 +552,23 @@ a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offs
   }
   .hero-typography-layer {
     align-items: flex-start;
-    padding-top: 22vh;
+    padding-top: 17vh;
   }
   .hero-portfolio-text {
-    font-size: clamp(74px, 22.5vw, 102px);
-    transform: none;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-size: clamp(40px, 12vw, 54px) !important;
+    letter-spacing: 0.12em !important;
+    gap: 4px !important;
+    transform: none !important;
+    padding: 0 !important;
+    text-align: center !important;
+  }
+  .hero-name-part {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
   }
   .hero-canvas-container {
     height: 65vh;
@@ -4707,7 +4727,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Syne:wght@800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@800;900&family=Bebas+Neue&family=Syne:wght@800;900&display=swap" rel="stylesheet">
 </head>
 
 
@@ -4744,8 +4764,8 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
   <defs>
     <filter id="heroLiquidFilter" x="-20%" y="-20%" width="140%" height="140%">
-      <feTurbulence id="heroWaveNoise" type="fractalNoise" baseFrequency="0.012 0.024" numOctaves="3" seed="3" result="noise" />
-      <feDisplacementMap id="heroWaveMap" in="SourceGraphic" in2="noise" scale="16" xChannelSelector="R" yChannelSelector="G" result="wavy" />
+      <feTurbulence id="heroWaveNoise" type="fractalNoise" baseFrequency="0.0055 0.0110" numOctaves="2" seed="5" result="noise" />
+      <feDisplacementMap id="heroWaveMap" in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" result="wavy" />
     </filter>
   </defs>
 </svg>
@@ -4773,7 +4793,10 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
     <!-- LAYER 2: Giant Black Typography & Liquid Wavy Particle Canvas -->
     <div class="hero-typography-layer">
-      <h1 class="hero-portfolio-text" id="heroText">PORTFOLIO</h1>
+      <h1 class="hero-portfolio-text" id="heroText" aria-label="Kevin Samuel">
+        <span class="hero-name-part hero-name-first">K E V I N</span>
+        <span class="hero-name-part hero-name-last">S A M U E L</span>
+      </h1>
       <canvas id="heroParticleCanvas" class="hero-particle-canvas"></canvas>
     </div>
 
@@ -5853,24 +5876,63 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     }
   }
 
-  // 2. Liquid Wavy Particle Canvas
+  // 2. Liquid Wavy Particle Canvas with Interactive Physics & Return to Home
   let pCtx = particleCanvas ? particleCanvas.getContext('2d') : null;
   let particles = [];
-  const P_COUNT = 85;
+  const P_COUNT = 90;
 
-  for (let i = 0; i < P_COUNT; i++) {
-    particles.push({
-      x: Math.random() * window.innerWidth,
-      y: window.innerHeight * 0.35 + Math.random() * (window.innerHeight * 0.3),
-      vx: (Math.random() - 0.5) * 0.8,
-      vy: (Math.random() - 0.5) * 0.5,
-      size: Math.random() * 2.2 + 0.8,
-      alpha: Math.random() * 0.35 + 0.15,
-      waveOffset: Math.random() * Math.PI * 2
-    });
+  function initParticles() {
+    particles = [];
+    const pW = stage.clientWidth || window.innerWidth;
+    const pH = stage.clientHeight || window.innerHeight;
+    for (let i = 0; i < P_COUNT; i++) {
+      const hx = Math.random() * pW;
+      const hy = pH * 0.32 + Math.random() * (pH * 0.36);
+      particles.push({
+        hx: hx,
+        hy: hy,
+        x: hx,
+        y: hy,
+        vx: 0,
+        vy: 0,
+        size: Math.random() * 2.2 + 0.8,
+        alpha: Math.random() * 0.32 + 0.14,
+        waveOffset: Math.random() * Math.PI * 2
+      });
+    }
   }
+  initParticles();
 
-  // 3. Scroll Tracking
+  // 3. Interactive Pointer & Scroll Tracking
+  let mouseX = -9999, mouseY = -9999;
+  let lastMouseX = -9999, lastMouseY = -9999;
+  let mouseSpeed = 0;
+  let mouseInteraction = 0;
+  let isPointerOver = false;
+
+  stage.addEventListener('pointermove', (e) => {
+    const rect = stage.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    if (lastMouseX > -9000) {
+      const d = Math.hypot(x - lastMouseX, y - lastMouseY);
+      mouseSpeed += (d - mouseSpeed) * 0.4;
+    }
+    lastMouseX = x;
+    lastMouseY = y;
+    mouseX = x;
+    mouseY = y;
+    isPointerOver = true;
+  }, { passive: true });
+
+  stage.addEventListener('pointerleave', () => {
+    isPointerOver = false;
+    mouseX = -9999;
+    mouseY = -9999;
+    lastMouseX = -9999;
+    lastMouseY = -9999;
+  }, { passive: true });
+
   function updateScroll() {
     const rect = track.getBoundingClientRect();
     const maxScroll = track.offsetHeight - window.innerHeight;
@@ -5882,9 +5944,11 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   window.addEventListener('scroll', updateScroll, { passive: true });
   updateScroll();
 
-  // 4. Animation & Scrub Loop
+  // 4. Animation, Interactive Liquid Wave & Particle Physics Loop
   let lastTime = 0;
   let wavePhase = 0;
+  const RESTING_SCALE = 2.5;
+  let currentScale = RESTING_SCALE;
 
   function loop(timestamp) {
     const dt = (timestamp - lastTime) * 0.001 || 0.016;
@@ -5903,17 +5967,30 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       videoElem.currentTime = currentProgress * videoElem.duration;
     }
 
-    wavePhase += dt * 0.8;
-    if (waveNoise && waveMap) {
-      const scrollVel = Math.abs(targetProgress - currentProgress);
-      const baseFreqX = (0.012 + 0.003 * Math.sin(wavePhase + currentProgress * 3.5)).toFixed(4);
-      const baseFreqY = (0.024 + 0.005 * Math.cos(wavePhase * 1.3 + currentProgress * 2.5)).toFixed(4);
-      const dynamicScale = (14 + scrollVel * 75 + 3.5 * Math.sin(wavePhase * 2)).toFixed(1);
-      
-      waveNoise.setAttribute('baseFrequency', `${baseFreqX} ${baseFreqY}`);
-      waveMap.setAttribute('scale', dynamicScale);
+    // Interactive pointer velocity decay & wave modulation
+    const scrollVel = Math.abs(targetProgress - currentProgress);
+    if (isPointerOver) {
+      mouseSpeed *= 0.88;
+      mouseInteraction = Math.max(0.06, Math.min(1.0, mouseSpeed * 0.04));
+    } else {
+      mouseInteraction += (0 - mouseInteraction) * 0.08;
     }
 
+    // Dynamic wave scale: expands during scroll or pointer movement, returns smoothly to RESTING_SCALE
+    const targetScale = RESTING_SCALE + scrollVel * 140 + mouseInteraction * 32;
+    currentScale += (targetScale - currentScale) * 0.12;
+
+    wavePhase += dt * (0.75 + scrollVel * 3.5 + mouseInteraction * 1.8);
+
+    if (waveNoise && waveMap) {
+      const baseFreqX = (0.0055 + 0.0015 * Math.sin(wavePhase + currentProgress * 2.8)).toFixed(4);
+      const baseFreqY = (0.0110 + 0.0025 * Math.cos(wavePhase * 1.4 + currentProgress * 2.0)).toFixed(4);
+      
+      waveNoise.setAttribute('baseFrequency', `${baseFreqX} ${baseFreqY}`);
+      waveMap.setAttribute('scale', currentScale.toFixed(2));
+    }
+
+    // Particle Canvas with spring return-to-home physics
     if (pCtx && particleCanvas) {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       pCtx.save();
@@ -5922,15 +5999,45 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       const pH = stage.clientHeight;
       pCtx.clearRect(0, 0, pW, pH);
 
+      const R = 140;
+      const R2 = R * R;
+      const springK = 0.045;
+      const friction = 0.86;
+
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-        p.x += p.vx + Math.sin(wavePhase + p.waveOffset) * 0.5;
-        p.y += p.vy + Math.cos(wavePhase * 1.2 + p.waveOffset) * 0.3;
 
-        if (p.x < 0) p.x = pW;
-        if (p.x > pW) p.x = 0;
-        if (p.y < pH * 0.2) p.y = pH * 0.65;
-        if (p.y > pH * 0.65) p.y = pH * 0.2;
+        // Pointer repulsion
+        if (isPointerOver && mouseX > -9000) {
+          const dx = p.x - mouseX;
+          const dy = p.y - mouseY;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < R2 && d2 > 0) {
+            const d = Math.sqrt(d2);
+            const F = (1 - d / R) * 8.5;
+            p.vx += (dx / d) * F;
+            p.vy += (dy / d) * F;
+          }
+        }
+
+        // Scroll turbulence impulse
+        if (scrollVel > 0.002) {
+          p.vx += (Math.random() - 0.5) * scrollVel * 35;
+          p.vy += (Math.random() - 0.5) * scrollVel * 18;
+        }
+
+        // Home anchor with gentle organic wave drift
+        const anchorX = p.hx + Math.sin(wavePhase + p.waveOffset) * 10;
+        const anchorY = p.hy + Math.cos(wavePhase * 1.2 + p.waveOffset) * 7;
+
+        // Spring return to home position
+        p.vx += (anchorX - p.x) * springK;
+        p.vy += (anchorY - p.y) * springK;
+        p.vx *= friction;
+        p.vy *= friction;
+
+        p.x += p.vx;
+        p.y += p.vy;
 
         pCtx.beginPath();
         pCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);

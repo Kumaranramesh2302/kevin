@@ -239,7 +239,7 @@
 
 
 
-html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px);overflow-x:clip}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px);overflow-x:hidden;max-width:100vw;width:100%}
 
 
 
@@ -255,7 +255,7 @@ html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px);over
 
 
 
-body{background:var(--bg);color:var(--fg);font-family:var(--f);overflow-x:clip;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--fg);font-family:var(--f);overflow-x:hidden;max-width:100vw;width:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 
 
@@ -328,6 +328,7 @@ a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offs
   height: 250vh; /* 150vh of silky smooth scroll pinning */
   background: #FFFFFF !important;
   z-index: 5;
+  overflow-x: hidden;
 }
 
 .hero-sticky-stage {
@@ -390,6 +391,7 @@ a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offs
   justify-content: center;
   pointer-events: none;
   overflow: hidden;
+  transform: translateY(14vh); /* Shift text downward significantly into lower hero region */
 }
 
 .hero-particle-canvas {
@@ -497,6 +499,9 @@ a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offs
 
 /* Responsive Media Queries */
 @media (max-width: 768px) {
+  .hero-typography-layer {
+    transform: translateY(8vh);
+  }
   .hero-top-nav {
     padding: 16px 18px;
   }
@@ -4721,7 +4726,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       <div class="hero-canvas-container" id="heroCanvasContainer">
         <canvas id="heroModelCanvas" class="hero-model-canvas"></canvas>
         <!-- Reference original video asset directly in DOM -->
-        <video id="heroVideo" src="hero section.mp4" playsinline muted preload="auto" style="display:none;"></video>
+        <video id="heroVideo" src="hero section.mp4" playsinline muted preload="none" style="display:none;"></video>
       </div>
     </div>
 
@@ -4873,19 +4878,19 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
 
         <div class="gallery-photos-container" id="gallery-photos" role="region" aria-label="Gallery Photographs">
-      <div class="gallery-photo-card" data-index="1" aria-label="Photograph 1"><img src="projects%20pics/13.jpg" alt="Far Top Left" loading="lazy" /></div>
-      <div class="gallery-photo-card" data-index="2" aria-label="Photograph 2"><img src="projects%20pics/12.jpg" alt="Inner Top Left" loading="lazy" /></div>
-      <div class="gallery-photo-card" data-index="3" aria-label="Photograph 3"><img src="projects%20pics/9.jpg" alt="Far Mid Left" loading="lazy" /></div>
-      <div class="gallery-photo-card" data-index="4" aria-label="Photograph 4"><img src="projects%20pics/4.jpg" alt="Inner Mid Left" loading="lazy" /></div>
-      <div class="gallery-photo-card" data-index="5" aria-label="Photograph 5"><img src="projects%20pics/3.jpg" alt="Far Lower Left" loading="lazy" /></div>
-      <div class="gallery-photo-card" data-index="6" aria-label="Photograph 6"><img src="projects%20pics/8.jpg" alt="Bottom Left" loading="lazy" /></div>
-      <div class="gallery-photo-card" data-index="7" aria-label="Photograph 7"><img src="projects%20pics/10.jpg" alt="Bottom Center" loading="lazy" /></div>
-      <div class="gallery-photo-card" data-index="8" aria-label="Photograph 8"><img src="projects%20pics/5.jpg" alt="Bottom Inner Right" loading="lazy" /></div>
-      <div class="gallery-photo-card" data-index="9" aria-label="Photograph 9"><img src="projects%20pics/11.jpg" alt="Far Bottom Right" loading="lazy" /></div>
-      <div class="gallery-photo-card" data-index="10" aria-label="Photograph 10"><img src="projects%20pics/6.jpg" alt="Inner Mid Right" loading="lazy" /></div>
-      <div class="gallery-photo-card" data-index="11" aria-label="Photograph 11"><img src="projects%20pics/2.jpg" alt="Far Mid Right" loading="lazy" /></div>
-      <div class="gallery-photo-card" data-index="12" aria-label="Photograph 12"><img src="projects%20pics/1.jpg" alt="Inner Top Right" loading="lazy" /></div>
-      <div class="gallery-photo-card" data-index="13" aria-label="Photograph 13"><img src="projects%20pics/7.jpg" alt="Far Top Right" loading="lazy" /></div>
+      <div class="gallery-photo-card" data-index="1" aria-label="Photograph 1"><img src="projects%20pics/13.jpg" alt="Far Top Left" loading="lazy" decoding="async" /></div>
+      <div class="gallery-photo-card" data-index="2" aria-label="Photograph 2"><img src="projects%20pics/12.jpg" alt="Inner Top Left" loading="lazy" decoding="async" /></div>
+      <div class="gallery-photo-card" data-index="3" aria-label="Photograph 3"><img src="projects%20pics/9.jpg" alt="Far Mid Left" loading="lazy" decoding="async" /></div>
+      <div class="gallery-photo-card" data-index="4" aria-label="Photograph 4"><img src="projects%20pics/4.jpg" alt="Inner Mid Left" loading="lazy" decoding="async" /></div>
+      <div class="gallery-photo-card" data-index="5" aria-label="Photograph 5"><img src="projects%20pics/3.jpg" alt="Far Lower Left" loading="lazy" decoding="async" /></div>
+      <div class="gallery-photo-card" data-index="6" aria-label="Photograph 6"><img src="projects%20pics/8.jpg" alt="Bottom Left" loading="lazy" decoding="async" /></div>
+      <div class="gallery-photo-card" data-index="7" aria-label="Photograph 7"><img src="projects%20pics/10.jpg" alt="Bottom Center" loading="lazy" decoding="async" /></div>
+      <div class="gallery-photo-card" data-index="8" aria-label="Photograph 8"><img src="projects%20pics/5.jpg" alt="Bottom Inner Right" loading="lazy" decoding="async" /></div>
+      <div class="gallery-photo-card" data-index="9" aria-label="Photograph 9"><img src="projects%20pics/11.jpg" alt="Far Bottom Right" loading="lazy" decoding="async" /></div>
+      <div class="gallery-photo-card" data-index="10" aria-label="Photograph 10"><img src="projects%20pics/6.jpg" alt="Inner Mid Right" loading="lazy" decoding="async" /></div>
+      <div class="gallery-photo-card" data-index="11" aria-label="Photograph 11"><img src="projects%20pics/2.jpg" alt="Far Mid Right" loading="lazy" decoding="async" /></div>
+      <div class="gallery-photo-card" data-index="12" aria-label="Photograph 12"><img src="projects%20pics/1.jpg" alt="Inner Top Right" loading="lazy" decoding="async" /></div>
+      <div class="gallery-photo-card" data-index="13" aria-label="Photograph 13"><img src="projects%20pics/7.jpg" alt="Far Top Right" loading="lazy" decoding="async" /></div>
     </div>
   </div>
 </section>
@@ -4967,7 +4972,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
           </div>
           
           <div class="film-modal-player-wrap">
-            <video class="film-modal-video" id="modalVideo" playsinline controls preload="auto"></video>
+            <video class="film-modal-video" id="modalVideo" playsinline controls preload="none"></video>
           </div>
 
           <div class="film-modal-footer">
@@ -5868,7 +5873,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       scrollFill.style.width = (currentProgress * 100).toFixed(1) + '%';
     }
 
-    if (videoElem && videoElem.duration) {
+    if (videoElem && videoElem.duration && videoElem.style.display !== 'none') {
       videoElem.currentTime = currentProgress * videoElem.duration;
     }
 
@@ -7068,8 +7073,21 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   onScroll();
   applyProgress(targetProgress);
 
+  let isStripVisible = true;
+  if ('IntersectionObserver' in window) {
+    const stripObs = new IntersectionObserver((entries) => {
+      isStripVisible = entries[0].isIntersecting;
+      if (isStripVisible) {
+        renderer.render(scene, camera);
+      }
+    }, { rootMargin: '150px' });
+    const stripElem = document.getElementById('film-strip-section');
+    if (stripElem) stripObs.observe(stripElem);
+  }
+
   function animate() {
     requestAnimationFrame(animate);
+    if (!isStripVisible) return;
 
     if (paramProgress === null) {
       const delta = targetProgress - currentProgress;
@@ -7619,7 +7637,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       window.addEventListener('mousemove', onPointerMove);
       window.addEventListener('touchmove', onPointerMove, { passive: true });
       window.addEventListener('mouseup', onPointerUp);
-      window.addEventListener('touchend', onPointerUp);
+      window.addEventListener('touchend', onPointerUp, { passive: true });
 
       // Smooth Animation RAF Loop
       function tick() {

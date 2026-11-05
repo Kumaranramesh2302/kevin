@@ -5805,15 +5805,15 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     tCtx.fillStyle = '#000000';
     tCtx.textBaseline = 'middle';
 
-    const textY = sH * dpr * 0.47;
+    const textY = sH * dpr * 0.52; // Shifted slightly downward within the hero frame
 
     if (mob) {
       const fs = Math.round(sW * 0.24);
       tCtx.font = (fs * dpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
       tCtx.letterSpacing = '-0.01em';
       tCtx.textAlign = 'center';
-      tCtx.fillText('KEVIN', sW * dpr / 2, textY - (fs * dpr * 0.58));
-      tCtx.fillText('SAMUEL', sW * dpr / 2, textY + (fs * dpr * 0.58));
+      tCtx.fillText('KEVIN', sW * dpr / 2, textY - (fs * dpr * 0.55));
+      tCtx.fillText('SAMUEL', sW * dpr / 2, textY + (fs * dpr * 0.55));
     } else {
       let fs = Math.min(Math.round(sH * 0.43), Math.round(sW * 0.175));
       tCtx.font = (fs * dpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
@@ -5821,7 +5821,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
       const m1 = tCtx.measureText('KEVIN').width;
       const m2 = tCtx.measureText('SAMUEL').width;
-      const spaceGap = Math.round(tCtx.measureText('  ').width * 1.25); // ~Two normal character spaces
+      const spaceGap = Math.round(tCtx.measureText(' ').width * 1.5); // Reduced by one space compared to previous version
 
       let totalSpan = m1 + spaceGap + m2;
       const maxSpan = sW * dpr * 0.96;
@@ -5830,7 +5830,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         tCtx.font = (fs * dpr) + 'px "Anton", "Haettenschweiler", "Impact", sans-serif';
         const nm1 = tCtx.measureText('KEVIN').width;
         const nm2 = tCtx.measureText('SAMUEL').width;
-        const ng = Math.round(tCtx.measureText('  ').width * 1.25);
+        const ng = Math.round(tCtx.measureText(' ').width * 1.5);
         totalSpan = nm1 + ng + nm2;
         const startX = (sW * dpr - totalSpan) / 2;
         tCtx.textAlign = 'left';

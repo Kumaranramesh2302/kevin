@@ -6354,7 +6354,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     tCtx.fillStyle = '#000000';
     tCtx.textBaseline = 'middle';
 
-    const textY = sH * dpr * (mob ? 0.42 : 0.515); // Slightly upward position so 'SA' portion is approximately half visible
+    const textY = sH * dpr * (mob ? 0.30 : 0.375); // Moved further upward by 2x current adjustment
 
     if (mob) {
       let fs = Math.min(Math.round(sW * 0.19), Math.round(sH * 0.105));

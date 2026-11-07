@@ -24,5 +24,9 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Reference videos in root
+reference font .mp4
+Screen Recording*.mp4
+
 # Large test video in root (the official optimized one is in public/finalize.mp4)
 /finalize/

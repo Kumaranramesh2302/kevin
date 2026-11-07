@@ -5394,6 +5394,8 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
     <!-- Photographer Animation Video -->
     <video id="photographer-video" class="photographer-video" playsinline muted preload="auto" poster="frames/frame_240.jpg">
+      <source src="one.mp4" type="video/mp4">
+      <source src="public/one.mp4" type="video/mp4">
       <source src="final 2.mp4" type="video/mp4">
       <source src="public/final 2.mp4" type="video/mp4">
       <source src="finalize.mp4" type="video/mp4">
@@ -6786,7 +6788,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       photogVideo.onerror = function() {
         if (!photogVideo.dataset.retried) {
           photogVideo.dataset.retried = '1';
-          photogVideo.src = (photogVideo.currentSrc && photogVideo.currentSrc.includes('public/')) ? 'final 2.mp4' : 'public/final 2.mp4';
+          photogVideo.src = (photogVideo.currentSrc && photogVideo.currentSrc.includes('public/')) ? 'one.mp4' : 'public/one.mp4';
           photogVideo.load();
           photogVideo.play().catch(function(){});
         }

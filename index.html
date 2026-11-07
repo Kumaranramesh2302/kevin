@@ -5201,29 +5201,12 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@800;900&family=Bebas+Neue&family=Syne:wght@800;900&display=swap" rel="stylesheet">
 <style>
 @font-face {
-  font-family: 'Bootzy';
-  src: url('fonts/Bootzy.woff2') format('woff2'),
-       url('fonts/Bootzy.woff') format('woff'),
-       url('fonts/Bootzy.otf') format('opentype'),
-       url('fonts/Bootzy.ttf') format('truetype'),
-       local('Bootzy'),
-       local('Bootzy TM'),
-       local('Bootzy-Regular'),
-       local('Bootzy Bold'),
-       local('Bootzy-Bold');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Boozty';
-  src: url('fonts/Bootzy.woff2') format('woff2'),
-       url('fonts/Bootzy.woff') format('woff'),
-       url('fonts/Bootzy.otf') format('opentype'),
-       url('fonts/Bootzy.ttf') format('truetype'),
-       local('Bootzy'),
-       local('Bootzy TM');
-  font-weight: 100 900;
+  font-family: 'Impact';
+  src: url('fonts/Impact.woff2') format('woff2'),
+       url('fonts/Impact.woff') format('woff'),
+       url('fonts/Impact.ttf') format('truetype'),
+       local('Impact');
+  font-weight: 400 900;
   font-style: normal;
   font-display: swap;
 }
@@ -6421,36 +6404,36 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     const textY = sH * dpr * (mob ? 0.30 : 0.375); // Moved further upward by 2x current adjustment
 
     if (mob) {
-      let fs = Math.min(Math.round(sW * 0.18), Math.round(sH * 0.095));
-      tCtx.font = '900 ' + (fs * dpr) + 'px "Bootzy", "Boozty", "Syne", "Impact", sans-serif';
-      tCtx.letterSpacing = '-0.02em';
+      let fs = Math.min(Math.round(sW * 0.19), Math.round(sH * 0.105));
+      tCtx.font = (fs * dpr) + 'px "Impact", "Haettenschweiler", "Anton", sans-serif';
+      tCtx.letterSpacing = '-0.01em';
       const maxW = (sW - 40) * dpr;
       let mSamuel = tCtx.measureText('SAMUEL').width;
       if (mSamuel > maxW) {
         fs = Math.floor(fs * maxW / mSamuel);
-        tCtx.font = '900 ' + (fs * dpr) + 'px "Bootzy", "Boozty", "Syne", "Impact", sans-serif';
+        tCtx.font = (fs * dpr) + 'px "Impact", "Haettenschweiler", "Anton", sans-serif';
       }
       tCtx.textAlign = 'center';
-      const gapY = fs * dpr * 0.58;
+      const gapY = fs * dpr * 0.54;
       tCtx.fillText('KEVIN', sW * dpr / 2, textY - gapY);
       tCtx.fillText('SAMUEL', sW * dpr / 2, textY + gapY);
     } else {
-      let fs = Math.min(Math.round(sH * 0.35), Math.round(sW * 0.13));
-      tCtx.font = '900 ' + (fs * dpr) + 'px "Bootzy", "Boozty", "Syne", "Impact", sans-serif';
-      tCtx.letterSpacing = '-0.02em';
+      let fs = Math.min(Math.round(sH * 0.43), Math.round(sW * 0.175));
+      tCtx.font = (fs * dpr) + 'px "Impact", "Haettenschweiler", "Anton", sans-serif';
+      tCtx.letterSpacing = '-0.01em';
 
       const m1 = tCtx.measureText('KEVIN').width;
       const m2 = tCtx.measureText('SAMUEL').width;
-      const spaceGap = Math.round(tCtx.measureText(' ').width * 1.2);
+      const spaceGap = Math.round(tCtx.measureText(' ').width * 1.5);
 
       let totalSpan = m1 + spaceGap + m2;
-      const maxSpan = sW * dpr * 0.94;
+      const maxSpan = sW * dpr * 0.96;
       if (totalSpan > maxSpan) {
         fs = Math.floor(fs * maxSpan / totalSpan);
-        tCtx.font = '900 ' + (fs * dpr) + 'px "Bootzy", "Boozty", "Syne", "Impact", sans-serif';
+        tCtx.font = (fs * dpr) + 'px "Impact", "Haettenschweiler", "Anton", sans-serif';
         const nm1 = tCtx.measureText('KEVIN').width;
         const nm2 = tCtx.measureText('SAMUEL').width;
-        const ng = Math.round(tCtx.measureText(' ').width * 1.2);
+        const ng = Math.round(tCtx.measureText(' ').width * 1.5);
         totalSpan = nm1 + ng + nm2;
         const startX = (sW * dpr - totalSpan) / 2;
         tCtx.textAlign = 'left';
@@ -6514,10 +6497,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 
   if (document.fonts) {
     if (document.fonts.load) {
-      document.fonts.load('900 100px Bootzy').then(() => {
-        renderTypography();
-      }).catch(() => {});
-      document.fonts.load('100px Bootzy').then(() => {
+      document.fonts.load('100px Impact').then(() => {
         renderTypography();
       }).catch(() => {});
     }

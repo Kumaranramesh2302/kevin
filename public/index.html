@@ -403,6 +403,20 @@ a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offs
   animation: fade 1.2s .3s both;
 }
 
+/* Cursor liquid-distort effect (WebGL canvas replaces the 2D text once ready) */
+.hero-fx-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:10;display:none}
+.hero-sticky-stage.hero-fx-on .hero-fx-canvas{display:block;animation:fade 1.2s .3s both}
+.hero-sticky-stage.hero-fx-on .hero-particle-canvas{visibility:hidden}
+.hero-cursor-dot{position:absolute;left:0;top:0;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:#fff;mix-blend-mode:difference;
+  pointer-events:none;z-index:60;opacity:0;transition:opacity .2s;will-change:transform;display:none}
+@media (hover:hover) and (pointer:fine){
+  .hero-sticky-stage.hero-fx-on{cursor:none}
+  .hero-sticky-stage.hero-fx-on a{cursor:pointer}
+  .hero-sticky-stage.hero-fx-on .hero-cursor-dot{display:block}
+  .hero-sticky-stage.hero-fx-on:has(a:hover) .hero-cursor-dot{opacity:0!important}
+}
+
+
 
 /* Layer 3: Model Foreground Canvas */
 .hero-model-layer {
@@ -5220,6 +5234,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
 <!-- REDESIGNED HERO SECTION (Pinned Scroll Track, Pure White #FFFFFF, Reference Typography, Original Particle Animation) -->
 <header class="hero-pinned-track" id="top">
   <div class="hero-sticky-stage" id="heroStage">
+    <div class="hero-cursor-dot" id="heroCursorDot" aria-hidden="true"></div>
 
     <!-- TOP NAVIGATION -->
     <div class="hero-top-nav">
@@ -5235,6 +5250,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     <div class="hero-typography-layer">
       <h1 class="sr">Kevin Samuel</h1>
       <canvas id="heroParticleCanvas" class="hero-particle-canvas" aria-hidden="true"></canvas>
+      <canvas id="heroFxCanvas" class="hero-fx-canvas" aria-hidden="true"></canvas>
     </div>
 
 
@@ -6338,6 +6354,9 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   const tCtx = typoCanvas ? typoCanvas.getContext('2d') : null;
 
   function renderTypography() {
+    try { _renderTypography(); } finally { if (window.__heroTypoUpdated) window.__heroTypoUpdated(); }
+  }
+  function _renderTypography() {
     if (!typoCanvas || !stage || !tCtx) return;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const sW = stage.clientWidth || window.innerWidth;
@@ -6467,6 +6486,240 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
     renderFrame(p);
   };
 })();
+
+/* ============================================================
+   HERO TEXT — CURSOR LIQUID-DISTORT EFFECT (WebGL2)
+   - Your existing renderTypography() output (#heroParticleCanvas) is used as the
+     texture source, so font / size / layout logic is unchanged.
+   - A low-res trail buffer stores cursor velocity (advects, diffuses, decays).
+   - The shader samples the text through that trail + a twirl/ripple at the cursor
+     head. Strong displacement folds glyph/background samples => black/white zebra
+     bands, exactly like the reference. It snaps back to clean type in ~0.3s.
+   - Sits at the same z-index as the old canvas, i.e. BEHIND the model layer.
+   - Falls back to the plain 2D text if WebGL2 / float targets are unavailable
+     or the visitor prefers reduced motion.
+   Tweak the look live from devtools via window.__heroFx.CONFIG
+   ============================================================ */
+(function () {
+  const stage = document.getElementById('heroStage');
+  const src   = document.getElementById('heroParticleCanvas');
+  const out   = document.getElementById('heroFxCanvas');
+  const dot   = document.getElementById('heroCursorDot');
+  if (!stage || !src || !out) return;
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const CONFIG = {
+    ink: [0, 0, 0],       // matches the '#000000' fill used by renderTypography()
+    simScale: 0.33,       // trail buffer resolution vs. canvas
+    radius: 0.02,         // cursor influence radius (aspect-corrected uv units)
+    force: 1.0,           // how strongly cursor motion pushes the trail
+    strength: 1.75,       // trail displacement amount
+    decay: 0.90,          // trail memory per 60Hz frame (lower = snaps back faster)
+    twirlRadius: 0.025,   // radius of the twirl at the cursor head
+    twirlAmount: 1.75,    // max twirl angle (radians) at full cursor speed
+    twirlDecay: 0.86,     // how fast the twirl relaxes when the cursor slows
+    ripple: 0.0025,       // concentric ring amplitude
+    edgeNoise: 0.08,      // slightly torn glyph edges (as in the reference)
+    idleMs: 1600,         // stop simulating this long after the cursor rests
+    dot: true             // small cursor dot, scoped to the hero
+  };
+
+  const gl = out.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false });
+  if (!gl) return;
+  if (!(gl.getExtension('EXT_color_buffer_float') || gl.getExtension('EXT_color_buffer_half_float'))) return;
+
+  const VS = `#version 300 es
+  out vec2 vUv;
+  void main(){
+    vec2 p = vec2((gl_VertexID<<1)&2, gl_VertexID&2);
+    vUv = p; gl_Position = vec4(p*2.-1., 0., 1.);
+  }`;
+
+  const SIM_FS = `#version 300 es
+  precision highp float;
+  in vec2 vUv; out vec4 o;
+  uniform sampler2D uPrev;
+  uniform vec2 uA, uB, uDelta;
+  uniform float uAspect, uRadius, uDecay, uForce, uK;
+  float seg(vec2 p, vec2 a, vec2 b){
+    vec2 pa=p-a, ba=b-a;
+    float h=clamp(dot(pa,ba)/max(dot(ba,ba),1e-8),0.,1.);
+    return length(pa-ba*h);
+  }
+  void main(){
+    vec2 px = 1.0/vec2(textureSize(uPrev,0));
+    vec2 v0 = texture(uPrev, vUv).xy;
+    vec2 v  = texture(uPrev, vUv - v0*0.6*uK).xy;                 // advect along itself
+    vec2 n  = texture(uPrev, vUv+vec2(px.x,0)).xy + texture(uPrev, vUv-vec2(px.x,0)).xy
+            + texture(uPrev, vUv+vec2(0,px.y)).xy + texture(uPrev, vUv-vec2(0,px.y)).xy;
+    v = mix(v, n*0.25, 0.22) * uDecay;                            // diffuse + decay
+    vec2 asp = vec2(uAspect,1.);
+    float d = seg(vUv*asp, uA*asp, uB*asp);                       // splat along travelled segment
+    float w = exp(-(d*d)/(uRadius*uRadius));
+    v += uDelta * w * uForce;
+    o = vec4(v, 0., 1.);
+  }`;
+
+  const DRAW_FS = `#version 300 es
+  precision highp float;
+  in vec2 vUv; out vec4 o;
+  uniform sampler2D uText, uSim;
+  uniform vec2 uHead;
+  uniform float uAspect, uStrength, uTw, uTwR, uRipple, uTime, uEdge;
+  uniform vec3 uInk;
+  float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453); }
+  float vnoise(vec2 p){
+    vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f);
+    return mix(mix(hash(i),hash(i+vec2(1,0)),f.x), mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x), f.y);
+  }
+  void main(){
+    vec2 asp = vec2(uAspect,1.);
+    vec2 q = vUv + texture(uSim, vUv).xy * uStrength;             // 1) trail displacement
+    vec2 d = (q - uHead)*asp;                                     // 2) twirl + rings at the head
+    float r = length(d);
+    float f = exp(-(r*r)/(uTwR*uTwR));
+    float a = uTw * f;
+    float cs=cos(a), sn=sin(a);
+    d = mat2(cs,-sn,sn,cs) * d;
+    d += normalize(d+1e-6) * sin(r*95. - uTime*14.) * uRipple * f * uTw;
+    q = uHead + d/asp;
+    float cov = texture(uText, q).a;                              // glyph coverage (1 = ink)
+    float nz  = vnoise(q*asp*420.) - .5;
+    cov = smoothstep(.42, .58, cov + nz*uEdge);                   // tiny torn-edge jitter
+    o = vec4(uInk*cov, cov);                                      // premultiplied
+  }`;
+
+  function sh(type, s) {
+    const x = gl.createShader(type); gl.shaderSource(x, s); gl.compileShader(x);
+    if (!gl.getShaderParameter(x, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(x));
+    return x;
+  }
+  function prog(fs) {
+    const p = gl.createProgram();
+    gl.attachShader(p, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, fs));
+    gl.linkProgram(p);
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+    const u = {}, n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS);
+    for (let i = 0; i < n; i++) { const nm = gl.getActiveUniform(p, i).name; u[nm] = gl.getUniformLocation(p, nm); }
+    return { p, u };
+  }
+  let simP, drawP;
+  try { simP = prog(SIM_FS); drawP = prog(DRAW_FS); } catch (e) { console.warn('[hero-fx]', e); return; }
+  gl.bindVertexArray(gl.createVertexArray());
+  gl.clearColor(0, 0, 0, 0);
+
+  function makeTarget(w, h) {
+    const tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, w, h, 0, gl.RGBA, gl.HALF_FLOAT, null);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    const fb = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    return { tex, fb, w, h };
+  }
+  const textTex = gl.createTexture();
+  let simA = null, simB = null, W = 0, H = 0, ready = false, dirty = true;
+
+  // Called by renderTypography() every time the 2D text is (re)drawn.
+  function uploadText() {
+    if (!src.width || !src.height) return;
+    if (src.width !== W || src.height !== H) {
+      if (simA) { gl.deleteTexture(simA.tex); gl.deleteFramebuffer(simA.fb); }
+      if (simB) { gl.deleteTexture(simB.tex); gl.deleteFramebuffer(simB.fb); }
+      W = src.width; H = src.height;
+      out.width = W; out.height = H;
+      const sw = Math.max(16, Math.round(W * CONFIG.simScale)), shh = Math.max(16, Math.round(H * CONFIG.simScale));
+      simA = makeTarget(sw, shh); simB = makeTarget(sw, shh);
+    }
+    gl.bindTexture(gl.TEXTURE_2D, textTex);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, src);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    if (!ready) { ready = true; stage.classList.add('hero-fx-on'); }
+    dirty = true; kick();
+  }
+  window.__heroTypoUpdated = uploadText;
+
+  // ---- pointer -----------------------------------------------------
+  const ptr = { x: .5, y: .5, px: .5, py: .5, inside: false, moved: false, last: 0 };
+  const head = { x: .5, y: .5 };
+  let tw = 0;
+  function onMove(e) {
+    const r = stage.getBoundingClientRect();
+    const cx = e.clientX, cy = e.clientY;
+    const inside = cx >= r.left && cx <= r.right && cy >= r.top && cy <= r.bottom;
+    if (!inside) { ptr.inside = false; if (dot) dot.style.opacity = 0; return; }
+    const x = (cx - r.left) / r.width, y = 1 - (cy - r.top) / r.height;
+    if (!ptr.inside) { ptr.px = x; ptr.py = y; head.x = x; head.y = y; ptr.inside = true; } // no streak on (re)entry
+    ptr.x = x; ptr.y = y; ptr.moved = true; ptr.last = performance.now();
+    if (dot && CONFIG.dot && e.pointerType !== 'touch') {
+      dot.style.transform = `translate(${cx - r.left}px, ${cy - r.top}px)`;
+      dot.style.opacity = 1;
+    }
+    kick();
+  }
+  window.addEventListener('pointermove', onMove, { passive: true });
+  document.addEventListener('pointerleave', () => { ptr.inside = false; if (dot) dot.style.opacity = 0; });
+
+  // ---- loop (runs only while the hero is on screen and the cursor is active) ----
+  let visible = true, raf = 0, prevT = 0;
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }, { threshold: 0 }).observe(stage);
+  function kick() { if (!raf && visible && ready) { prevT = 0; raf = requestAnimationFrame(frame); } }
+
+  const T0 = performance.now();
+  function frame(now) {
+    raf = 0;
+    if (!visible || !ready) return;
+    const k = prevT ? Math.min((now - prevT) / 16.667, 3) : 1;    // frame-rate independence
+    prevT = now;
+    const aspect = W / H;
+    const dx = ptr.moved ? ptr.x - ptr.px : 0, dy = ptr.moved ? ptr.y - ptr.py : 0;
+    const speed = Math.hypot(dx * aspect, dy) / k;
+    head.x += (ptr.x - head.x) * (1 - Math.pow(0.55, k));
+    head.y += (ptr.y - head.y) * (1 - Math.pow(0.55, k));
+    tw = Math.max(tw * Math.pow(CONFIG.twirlDecay, k), Math.min(speed * 28, 1) * CONFIG.twirlAmount);
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, simB.fb); gl.viewport(0, 0, simB.w, simB.h);
+    gl.useProgram(simP.p);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, simA.tex); gl.uniform1i(simP.u.uPrev, 0);
+    gl.uniform2f(simP.u.uA, ptr.px, ptr.py); gl.uniform2f(simP.u.uB, ptr.x, ptr.y);
+    gl.uniform2f(simP.u.uDelta, dx, dy);
+    gl.uniform1f(simP.u.uAspect, aspect); gl.uniform1f(simP.u.uRadius, CONFIG.radius);
+    gl.uniform1f(simP.u.uDecay, Math.pow(CONFIG.decay, k)); gl.uniform1f(simP.u.uForce, CONFIG.force);
+    gl.uniform1f(simP.u.uK, k);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    const t = simA; simA = simB; simB = t;
+    ptr.px = ptr.x; ptr.py = ptr.y; ptr.moved = false;
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, W, H);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.useProgram(drawP.p);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, textTex); gl.uniform1i(drawP.u.uText, 0);
+    gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, simA.tex); gl.uniform1i(drawP.u.uSim, 1);
+    gl.uniform2f(drawP.u.uHead, head.x, head.y);
+    gl.uniform1f(drawP.u.uAspect, aspect); gl.uniform1f(drawP.u.uStrength, CONFIG.strength);
+    gl.uniform1f(drawP.u.uTw, tw); gl.uniform1f(drawP.u.uTwR, CONFIG.twirlRadius);
+    gl.uniform1f(drawP.u.uRipple, CONFIG.ripple); gl.uniform1f(drawP.u.uEdge, CONFIG.edgeNoise);
+    gl.uniform1f(drawP.u.uTime, (now - T0) / 1000);
+    gl.uniform3fv(drawP.u.uInk, CONFIG.ink);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    dirty = false;
+
+    // keep going while the cursor is active or the distortion is still relaxing
+    if ((now - ptr.last) < CONFIG.idleMs || tw > 0.02) raf = requestAnimationFrame(frame);
+  }
+
+  if (src.width) uploadText();
+  window.__heroFx = { CONFIG };   // live tuning: __heroFx.CONFIG.strength = 14 …
+})();
+
 
 /* ---------- Cinematic Scroll-Driven Photography Gallery (Original MP4 Video + Sequential Photo Reveal) ---------- */
   (function() {

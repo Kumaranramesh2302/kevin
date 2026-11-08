@@ -5210,6 +5210,277 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
   font-style: normal;
   font-display: swap;
 }
+
+/* ============================================================
+   PLAYING CARDS: UNIVERSAL PERFECT FIT & CONTENT ALIGNMENT
+   Guarantees 100% of card content stays strictly inside inner frame
+   with elegant margins across PC, Laptop, Tablet, and Mobile
+   ============================================================ */
+.card-face.card-front {
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+.card-border-mid {
+  inset: 7px !important;
+}
+.card-border-inner {
+  inset: 10px !important;
+}
+.card-body-content {
+  position: relative !important;
+  z-index: 4 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  padding: 14px 16px 12px 16px !important;
+  overflow: hidden !important;
+  text-align: center !important;
+}
+
+.card-top-header {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 2px !important;
+  padding: 0 18px !important;
+}
+.crown-ornament-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin-bottom: 3px !important;
+}
+.crown-flank-line {
+  max-width: 55px !important;
+  height: 1.2px !important;
+}
+.gold-crown-svg {
+  width: 22px !important;
+  height: 14px !important;
+}
+.card-chapter-tag {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: clamp(8px, 0.72vw, 9.5px) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.16em !important;
+  color: #000000 !important;
+  margin-bottom: 2px !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+}
+.card-main-title {
+  font-family: 'Cinzel', serif !important;
+  font-size: clamp(15px, 1.45vw, 19.5px) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.06em !important;
+  line-height: 1.15 !important;
+  color: #000000 !important;
+  margin: 2px 0 2px 0 !important;
+  text-transform: uppercase !important;
+  -webkit-text-stroke: 0.25px #000000 !important;
+}
+.card-tagline {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: clamp(7.5px, 0.68vw, 8.8px) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  color: #1a1a1a !important;
+  margin-top: 1px !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+}
+
+.card-center-divider {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 72% !important;
+  margin: 4px auto !important;
+}
+.divider-line {
+  height: 1px !important;
+}
+.divider-star {
+  font-size: 7.5px !important;
+  font-weight: 900 !important;
+}
+
+.card-narrative-box {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 0 10px !important;
+  gap: 6px !important;
+  text-align: center !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 0 auto !important;
+}
+.narrative-text {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: clamp(10.2px, 0.88vw, 11.8px) !important;
+  font-weight: 700 !important;
+  line-height: 1.44 !important;
+  color: #000000 !important;
+  text-align: center !important;
+  letter-spacing: 0.008em !important;
+  margin: 0 !important;
+}
+.card-narrative-box .narrative-text + .narrative-text,
+.card-narrative-box p.narrative-text[style] {
+  margin-top: 5px !important;
+}
+
+.card-footer-box {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 3px !important;
+  margin-top: auto !important;
+  padding-bottom: 2px !important;
+}
+.footer-line {
+  width: 68% !important;
+  height: 1px !important;
+}
+.card-edition-text {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: clamp(7.2px, 0.65vw, 8.2px) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.14em !important;
+  color: #000000 !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+}
+
+.card-corner-index.tl { top: 12px !important; left: 12px !important; }
+.card-corner-index.br { bottom: 12px !important; right: 12px !important; }
+.corner-rank { font-size: clamp(16px, 1.4vw, 20px) !important; }
+.corner-suit { font-size: clamp(10px, 0.9vw, 13px) !important; margin-top: 1px !important; }
+.card-corner-svg { width: 30px !important; height: 30px !important; }
+
+/* Laptop Specific Tuning (width >= 769px and height <= 820px) */
+@media (min-width: 769px) and (max-height: 820px) {
+  .story-deck-section {
+    --card-h: clamp(450px, 62vh, 500px) !important;
+  }
+  .card-body-content {
+    padding: 11px 13px 9px 13px !important;
+  }
+  .card-main-title {
+    font-size: 15.5px !important;
+  }
+  .narrative-text {
+    font-size: 10.2px !important;
+    line-height: 1.38 !important;
+  }
+  .card-narrative-box .narrative-text + .narrative-text,
+  .card-narrative-box p.narrative-text[style] {
+    margin-top: 4px !important;
+  }
+}
+
+/* Mobile Devices (<= 768px) */
+@media (max-width: 768px) {
+  .story-deck-section {
+    --card-h: clamp(380px, 58vh, 440px) !important;
+  }
+  .card-body-content {
+    padding: 10px 10px 6px 10px !important;
+  }
+  .card-top-header {
+    padding: 0 12px !important;
+  }
+  .gold-crown-svg {
+    width: 18px !important;
+    height: 11px !important;
+  }
+  .crown-flank-line {
+    max-width: 32px !important;
+  }
+  .card-chapter-tag {
+    font-size: 7.5px !important;
+  }
+  .card-main-title {
+    font-size: 13.5px !important;
+  }
+  .card-tagline {
+    font-size: 6.8px !important;
+  }
+  .card-center-divider {
+    margin: 3px auto !important;
+    width: 75% !important;
+  }
+  .narrative-text {
+    font-size: 8.8px !important;
+    line-height: 1.35 !important;
+  }
+  .card-narrative-box .narrative-text + .narrative-text,
+  .card-narrative-box p.narrative-text[style] {
+    margin-top: 3px !important;
+  }
+  .card-edition-text {
+    font-size: 6.5px !important;
+  }
+  .corner-rank { font-size: 13px !important; }
+  .corner-suit { font-size: 8.5px !important; }
+  .card-corner-svg { width: 22px !important; height: 22px !important; }
+}
+
+/* Small Mobile (<= 380px or height <= 680px) */
+@media (max-width: 380px), (max-height: 680px) and (max-width: 768px) {
+  .story-deck-section {
+    --card-h: clamp(350px, 57vh, 390px) !important;
+  }
+  .card-body-content {
+    padding: 8px 8px 5px 8px !important;
+  }
+  .card-top-header {
+    padding: 0 8px !important;
+  }
+  .crown-ornament-row {
+    height: 10px !important;
+    margin-bottom: 1px !important;
+  }
+  .gold-crown-svg {
+    width: 15px !important;
+    height: 9px !important;
+  }
+  .card-chapter-tag {
+    font-size: 6.8px !important;
+    margin-bottom: 1px !important;
+  }
+  .card-main-title {
+    font-size: 12px !important;
+    margin: 1px 0 !important;
+  }
+  .card-tagline {
+    font-size: 6.2px !important;
+  }
+  .card-center-divider {
+    margin: 2px auto !important;
+  }
+  .narrative-text {
+    font-size: 8px !important;
+    line-height: 1.28 !important;
+  }
+  .card-narrative-box .narrative-text + .narrative-text,
+  .card-narrative-box p.narrative-text[style] {
+    margin-top: 2px !important;
+  }
+  .card-edition-text {
+    font-size: 5.8px !important;
+  }
+  .corner-rank { font-size: 11px !important; }
+  .corner-suit { font-size: 7.5px !important; }
+}
 </style>
 </head>
 
@@ -5742,7 +6013,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
                   </div>
 
                   <div class="card-narrative-box">
-                    <p class="narrative-text">I'm a filmmaker, photographer, and creative professional passionate about visual storytelling. As the founder of ZHA Productions, I bring ideas to life through cinematography, direction, photography, and video production.</p>
+                    <p class="narrative-text">I'm a filmmaker, photographer, and creative professional passionate about visual storytelling. I bring ideas to life through cinematography, direction, photography, and video production.</p>
                   </div>
 
                   <div class="card-footer-box">
@@ -8738,17 +9009,22 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
       function reset() {
         run++; state = 'idle'; svg.innerHTML = ''; placed = [];
         chars.forEach(a => a.forEach(c => c.classList.remove('on')));
-        curEl.classList.remove('show', 'typing');
+        curEl.style.display = ''; curEl.classList.remove('show', 'typing');
         boxes.forEach(b => b.classList.remove('revealed'));
       }
-      function finish() { state = 'done'; boxes.forEach((b, i) => setTimeout(() => state === 'done' && b.classList.add('revealed'), reduced ? 0 : 250 + i * 160)); }
+      function finish() {
+        state = 'done';
+        curEl.classList.remove('show', 'typing');
+        curEl.style.display = 'none';
+        boxes.forEach((b, i) => setTimeout(() => state === 'done' && b.classList.add('revealed'), reduced ? 0 : 250 + i * 160));
+      }
       async function play() {
         const id = ++run; state = 'playing';
         try { await Promise.race([document.fonts.load('400 100px "Playfair Display"'), wait(1500)]); } catch (e) {}
         if (id !== run) return;
         if (reduced) { chars.forEach(a => a.forEach(c => c.classList.add('on'))); redrawAll();
           placeCursor(2, LINES[2].length - 1); curEl.classList.add('show'); finish(); return; }
-        placeCursor(0, -1); curEl.classList.add('show');
+        curEl.style.display = ''; placeCursor(0, -1); curEl.classList.add('show');
         await wait(700); const rnd = rng(42);
         for (let li = 0; li < LINES.length; li++) {
           if (li) { if (id !== run) return; placeCursor(li, -1); await wait(480); }
@@ -8762,7 +9038,7 @@ footer{padding:22px 4vw;font-size:12px;background:var(--dark);color:#8b8b88;disp
         if (id === run) finish();
       }
       addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => {
-        if (state === 'done') { redrawAll(); placeCursor(2, LINES[2].length - 1); } }, 150); });
+        if (state === 'done') { redrawAll(); curEl.style.display = 'none'; } }, 150); });
 
       // ---- scroll controller (bi-directional): types when slide is in view, resets when it leaves
       let ticking = false;
